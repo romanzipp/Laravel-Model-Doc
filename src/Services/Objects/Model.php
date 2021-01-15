@@ -19,6 +19,7 @@ final class Model
      * Model constructor.
      *
      * @param \Symfony\Component\Finder\SplFileInfo $fileInfo
+     *
      * @throws \romanzipp\ModelDoc\Exceptions\InvalidModelException
      */
     public function __construct(SplFileInfo $fileInfo)
