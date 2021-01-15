@@ -3,7 +3,6 @@
 namespace romanzipp\ModelDoc\Services\Objects;
 
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
-use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionException;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;

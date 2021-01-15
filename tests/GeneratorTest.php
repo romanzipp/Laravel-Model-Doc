@@ -2,6 +2,7 @@
 
 namespace romanzipp\ModelDoc\Tests;
 
+use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 use romanzipp\ModelDoc\Services\Objects\Model;
 
@@ -9,11 +10,9 @@ class GeneratorTest extends TestCase
 {
     public function testBasic()
     {
-        $model = new Model(
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/BasicModel.php')
-        );
-
-        $doc = (new DocumentationGenerator())->generateDocBlock($model);
+        ));
 
         self::assertDocBlock([
             '/**',
@@ -29,11 +28,14 @@ class GeneratorTest extends TestCase
 
     public function testRelations()
     {
-        $model = new Model(
-            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
-        );
+        config([
+            'model-doc.relations.enabled' => true,
+            'model-doc.relations.counts.enabled' => true,
+        ]);
 
-        $doc = (new DocumentationGenerator())->generateDocBlock($model);
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+        ));
 
         self::assertDocBlock([
             '/**',
@@ -57,5 +59,66 @@ class GeneratorTest extends TestCase
             ' * @property int|null $has_many_through_relations_count',
             ' */',
         ], $doc);
+    }
+
+    public function testRelationsWithoutCounts()
+    {
+        config([
+            'model-doc.relations.enabled' => true,
+            'model-doc.relations.counts.enabled' => false,
+        ]);
+
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            // BelongsTo
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $belongsToRelation',
+            // BelongsToMany
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $belongsToManyRelation',
+            // HasOne
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
+            // HasOneThrough
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasOneThroughRelation',
+            // HasMany
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
+            // HasManyThrough
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyThroughRelation',
+            ' */',
+        ], $doc);
+    }
+
+    public function testAllRelationsDisabled()
+    {
+        config([
+            'model-doc.relations.enabled' => false,
+            'model-doc.relations.counts.enabled' => false,
+        ]);
+
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' */',
+        ], $doc);
+    }
+
+    public function testAllRelationsDisabledThrowException()
+    {
+        $this->expectException(ModelDocumentationFailedException::class);
+
+        config([
+            'model-doc.relations.enabled' => false,
+            'model-doc.relations.counts.enabled' => false,
+            'model-doc.fail_when_empty' => true,
+        ]);
+
+        (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+        ));
     }
 }

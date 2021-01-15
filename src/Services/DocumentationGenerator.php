@@ -110,6 +110,10 @@ class DocumentationGenerator
             implode('|', $propertyReturns)
         );
 
+        if (false === config('model-doc.relations.counts.enabled')) {
+            return [$relationProperty];
+        }
+
         $countVariable = Str::snake($reflectionMethod->getName());
         $countVariable = Str::plural($countVariable);
 
@@ -121,8 +125,8 @@ class DocumentationGenerator
     }
 
     /**
+     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
      * @param \gossi\docblock\Docblock $docblock
-     * @param \ReflectionClass $reflectionClass
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      */
@@ -292,11 +296,20 @@ class DocumentationGenerator
         return $types;
     }
 
+    /**
+     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     *
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     *
+     * @return \gossi\docblock\Docblock
+     */
     public function generateDocBlock(Model $model): Docblock
     {
         $doc = new Docblock();
 
         $reflectionClass = $model->getReflectionClass();
+
+        // 1. Generate properties from database columns
 
         if ( ! $reflectionClass->isAbstract()) {
             try {
@@ -311,7 +324,9 @@ class DocumentationGenerator
             }
         }
 
-        if (isset($instance)) {
+        // 2. Generate properties from relation methods
+
+        if (isset($instance) && true === config('model-doc.relations.enabled')) {
             foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
                 /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
                 $relation = $instance->{$reflectionMethod->getName()}();
@@ -332,7 +347,7 @@ class DocumentationGenerator
             }
         }
 
-        if ($doc->getTags()->isEmpty()) {
+        if (true === config('model-doc.fail_when_empty') && $doc->getTags()->isEmpty()) {
             throw new ModelDocumentationFailedException('The tag is empty');
         }
 
