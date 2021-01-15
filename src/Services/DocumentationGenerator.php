@@ -13,12 +13,12 @@ use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
-use ModelDocumentationFailedException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
+use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\Objects\Model;
 use Symfony\Component\Finder\Finder;
 

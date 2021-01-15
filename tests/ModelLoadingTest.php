@@ -10,7 +10,7 @@ class ModelLoadingTest extends TestCase
     public function testValidModel()
     {
         $model = new Model(
-            $this->getFile(__DIR__ . '/Support/DummyModel.php')
+            $this->getFile(__DIR__ . '/Support/BasicModelNoTable.php')
         );
 
         self::assertInstanceOf(Model::class, $model);
