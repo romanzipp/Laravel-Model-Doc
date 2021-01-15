@@ -97,15 +97,4 @@ final class Model
             $this->getQualifiedClassName()
         );
     }
-
-    private function isIncluded(): bool
-    {
-        $path = $this->fileInfo->getPathname();
-
-        if ( ! Str::contains($path, 'Models/')) {
-            return false;
-        }
-
-        return true;
-    }
 }
