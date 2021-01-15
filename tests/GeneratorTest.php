@@ -26,4 +26,36 @@ class GeneratorTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testRelations()
+    {
+        $model = new Model(
+            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+        );
+
+        $doc = (new DocumentationGenerator())->generateDocBlock($model);
+
+        self::assertDocBlock([
+            '/**',
+            // BelongsTo
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $belongsToRelation',
+            ' * @property int|null $belongs_to_relations_count',
+            // BelongsToMany
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $belongsToManyRelation',
+            ' * @property int|null $belongs_to_many_relations_count',
+            // HasOne
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
+            ' * @property int|null $has_one_relations_count',
+            // HasOneThrough
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasOneThroughRelation',
+            ' * @property int|null $has_one_through_relations_count',
+            // HasMany
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
+            ' * @property int|null $has_many_relations_count',
+            // HasManyThrough
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyThroughRelation',
+            ' * @property int|null $has_many_through_relations_count',
+            ' */',
+        ], $doc);
+    }
 }

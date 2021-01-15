@@ -311,22 +311,24 @@ class DocumentationGenerator
             }
         }
 
-        foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
-            /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
-            $relation = $model->{$reflectionMethod->getName()}();
+        if (isset($instance)) {
+            foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
+                /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
+                $relation = $instance->{$reflectionMethod->getName()}();
 
-            if ($relation instanceof Relations\MorphOneOrMany || $relation instanceof Relations\MorphTo) {
-                continue; // TODO
-            }
+                if ($relation instanceof Relations\MorphOneOrMany || $relation instanceof Relations\MorphTo) {
+                    continue; // TODO
+                }
 
-            $properties = $this->getPropertiesForRelation($reflectionMethod, $relation);
+                $properties = $this->getPropertiesForRelation($reflectionMethod, $relation);
 
-            if (empty($properties)) {
-                continue;
-            }
+                if (empty($properties)) {
+                    continue;
+                }
 
-            foreach ($properties as $property) {
-                $doc->appendTag($property);
+                foreach ($properties as $property) {
+                    $doc->appendTag($property);
+                }
             }
         }
 
