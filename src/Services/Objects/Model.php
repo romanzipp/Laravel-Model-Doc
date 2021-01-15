@@ -15,6 +15,12 @@ final class Model
 
     private ?ReflectionClass $reflectionClass = null;
 
+    /**
+     * Model constructor.
+     *
+     * @param \Symfony\Component\Finder\SplFileInfo $fileInfo
+     * @throws \romanzipp\ModelDoc\Exceptions\InvalidModelException
+     */
     public function __construct(SplFileInfo $fileInfo)
     {
         $this->fileInfo = $fileInfo;
@@ -67,13 +73,6 @@ final class Model
         return $this->reflectionClass;
     }
 
-    public function refreshReflection(): void
-    {
-        $this->reflectionClass = new ReflectionClass(
-            $this->getQualifiedClassName()
-        );
-    }
-
     public function getName(): string
     {
         return "{$this->reflectionClass->getNamespaceName()}\\{$this->reflectionClass->getName()}";
@@ -84,9 +83,11 @@ final class Model
         require_once $this->fileInfo->getPathname();
     }
 
-    public function getQualifiedClassName()
+    public function getQualifiedClassName(): string
     {
-        return "{$this->guessNamespace()}\\{$this->fileInfo->getFilenameWithoutExtension()}";
+        $fileName = str_replace('.php', '', $this->fileInfo->getFilename());
+
+        return "{$this->guessNamespace()}\\{$fileName}";
     }
 
     private function isClassLoaded(): bool
