@@ -124,7 +124,7 @@ class DocumentationGenerator
      * @param \gossi\docblock\Docblock $docblock
      * @param \ReflectionClass $reflectionClass
      *
-     * @throws \ModelDocumentationFailedException
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      */
     private function writeDoc(Docblock $docblock, ReflectionClass $reflectionClass): void
     {
@@ -176,7 +176,7 @@ class DocumentationGenerator
      * @param \ReflectionClass $reflectionClass
      * @param \Illuminate\Database\Eloquent\Model $model
      *
-     * @throws \ModelDocumentationFailedException
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
      * @return array
      */
@@ -220,7 +220,7 @@ class DocumentationGenerator
      * @param \Illuminate\Database\Eloquent\Model $model
      * @param \Doctrine\DBAL\Schema\Column $column
      *
-     * @throws \ModelDocumentationFailedException
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
      * @return array
      */
@@ -293,7 +293,7 @@ class DocumentationGenerator
     /**
      * @param \romanzipp\ModelDoc\Services\Objects\Model $model
      *
-     * @throws \ModelDocumentationFailedException
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      */
     public function generate(Model $model): void
     {
