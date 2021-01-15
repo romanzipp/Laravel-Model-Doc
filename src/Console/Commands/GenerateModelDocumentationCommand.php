@@ -3,12 +3,12 @@
 namespace romanzipp\ModelDoc\Console\Commands;
 
 use Illuminate\Console\Command;
-use ModelDocumentationFailedException;
+use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 
 class GenerateModelDocumentationCommand extends Command
 {
-    protected $signature = 'dev:ide';
+    protected $signature = 'model-doc:generate';
 
     public function handle(DocumentationGenerator $generator): void
     {
