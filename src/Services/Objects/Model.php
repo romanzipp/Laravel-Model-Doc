@@ -19,7 +19,7 @@ final class Model
     {
         $this->fileInfo = $fileInfo;
 
-        if (!$this->fileExists()){
+        if ( ! $this->fileExists()) {
             throw new InvalidModelException('File not found');
         }
 
@@ -39,12 +39,12 @@ final class Model
             throw new InvalidModelException('Could not create reflection class');
         }
 
-        if (!$this->reflectionClass->isSubclassOf(IlluminateModel::class)){
+        if ( ! $this->reflectionClass->isSubclassOf(IlluminateModel::class)) {
             throw new InvalidModelException('Class does not extend Illuminate\Database\Eloquent\Model');
         }
     }
 
-    public function fileExists():bool
+    public function fileExists(): bool
     {
         return file_exists(
             $this->fileInfo->getPathname()
@@ -65,6 +65,13 @@ final class Model
     public function getReflectionClass(): ReflectionClass
     {
         return $this->reflectionClass;
+    }
+
+    public function refreshReflection(): void
+    {
+        $this->reflectionClass = new ReflectionClass(
+            $this->getQualifiedClassName()
+        );
     }
 
     public function getName(): string
