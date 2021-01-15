@@ -2,6 +2,7 @@
 
 namespace romanzipp\ModelDoc\Tests;
 
+use gossi\docblock\Docblock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTestCase;
@@ -25,11 +26,22 @@ class TestCase extends BaseTestCase
         );
     }
 
-    protected function setupDatabase(Application $app)
+    protected function setupDatabase(Application $app): void
     {
         $app['db']->connection()->getSchemaBuilder()->create('table_one', function (Blueprint $table) {
-            $table->integer('integer')->autoIncrement();
-            $table->integer('string');
+            $table->integer('column_integer');
+            $table->integer('column_integer_nullable')->nullable();
+
+            $table->string('column_string');
+            $table->string('column_string_nullable')->nullable();
+
+            $table->boolean('column_boolean');
+            $table->boolean('column_boolean_nullable')->nullable();
         });
+    }
+
+    protected static function assertDocBlock(array $expected, Docblock $actual): void
+    {
+        self::assertSame(implode(PHP_EOL, $expected), $actual->toString());
     }
 }

@@ -126,8 +126,10 @@ class DocumentationGenerator
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      */
-    private function writeDoc(Docblock $docblock, ReflectionClass $reflectionClass): void
+    private function writeDoc(Model $model, Docblock $docblock): void
     {
+        $reflectionClass = $model->getReflectionClass();
+
         $content = file_get_contents($reflectionClass->getFileName());
 
         $lineIndexClassDeclaration = null;
@@ -290,12 +292,7 @@ class DocumentationGenerator
         return $types;
     }
 
-    /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
-     *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
-     */
-    public function generate(Model $model): void
+    public function generateDocBlock(Model $model): Docblock
     {
         $doc = new Docblock();
 
@@ -337,6 +334,16 @@ class DocumentationGenerator
             throw new ModelDocumentationFailedException('The tag is empty');
         }
 
-        $this->writeDoc($doc, $reflectionClass);
+        return $doc;
+    }
+
+    /**
+     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     *
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     */
+    public function generate(Model $model): void
+    {
+        $this->writeDoc($model, $this->generateDocBlock($model));
     }
 }
