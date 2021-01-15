@@ -14,6 +14,12 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        config([
+            'model-doc.relations.enabled' => true,
+            'model-doc.relations.counts.enabled' => true,
+            'model-doc.attributes.enabled' => true,
+        ]);
+
         $this->setupDatabase($this->app);
     }
 

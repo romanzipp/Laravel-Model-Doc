@@ -311,7 +311,7 @@ class DocumentationGenerator
 
         // 1. Generate properties from database columns
 
-        if ( ! $reflectionClass->isAbstract()) {
+        if (true === config('model-doc.attributes.enabled') && ! $reflectionClass->isAbstract()) {
             try {
                 /** @var \Illuminate\Database\Eloquent\Model $instance */
                 $instance = $reflectionClass->newInstance();
@@ -335,13 +335,7 @@ class DocumentationGenerator
                     continue; // TODO
                 }
 
-                $properties = $this->getPropertiesForRelation($reflectionMethod, $relation);
-
-                if (empty($properties)) {
-                    continue;
-                }
-
-                foreach ($properties as $property) {
+                foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
                     $doc->appendTag($property);
                 }
             }

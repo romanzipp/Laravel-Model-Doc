@@ -14,6 +14,7 @@ return [
     ],
 
     'attributes' => [
+        // Enable generating PHPDoc properties for database columns
         'enabled' => true,
     ],
 
