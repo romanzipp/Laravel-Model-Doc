@@ -15,13 +15,13 @@
         "doctrine/dbal": "^3.0",
         "gossi/docblock": "^2.0",
         "illuminate/console": "^8.0",
-        "illuminate/support": "^8.0",
-        "romanzipp/php-cs-fixer-config": "^1.0"
+        "illuminate/support": "^8.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.17",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "orchestra/testbench": "^5.0|^6.0",
-        "phpunit/phpunit": "^8.0|^9.0"
+        "phpunit/phpunit": "^8.0|^9.0",
+        "romanzipp/php-cs-fixer-config": "^3.0"
     },
     "autoload": {
         "psr-4": {
