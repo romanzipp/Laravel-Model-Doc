@@ -33,6 +33,31 @@ php artisan vendor:publish --provider="romanzipp\ModelDoc\Providers\ModelDocServ
 php artisan model-doc:generate
 ```
 
+### Prepare your models
+
+#### Relations
+
+The package utilizes return types to identify realtions.
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class MyModel extends Model
+{
+    protected $table = 'models';
+    
+    public function teams(): HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
+}
+```
+
+
+
+### Example
+
 ```php
 use Illuminate\Database\Eloquent\Model;
 
