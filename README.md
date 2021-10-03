@@ -16,7 +16,7 @@ Generate PHPDoc comments for Laravel Models.
 ## Installation
 
 ```
-composer require romanzipp/laravel-model-doc
+composer require romanzipp/laravel-model-doc --dev
 ```
 
 ## Configuration
@@ -33,7 +33,6 @@ php artisan vendor:publish --provider="romanzipp\ModelDoc\Providers\ModelDocServ
 php artisan model-doc:generate
 ```
 
-
 ```php
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,7 +46,13 @@ class MyModel extends Model
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property-read 
+ * @property string $id
+ * @property string $title
+ * @property string|null $icon
+ * @property int $order
+ * @property bool $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class MyModel extends Model
 {
