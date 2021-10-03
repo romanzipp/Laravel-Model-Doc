@@ -30,7 +30,7 @@ class ModelDocServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(
             dirname(__DIR__) . '/../config/model-doc.php',
-            'seo'
+            'model-doc'
         );
 
         $this->commands([
