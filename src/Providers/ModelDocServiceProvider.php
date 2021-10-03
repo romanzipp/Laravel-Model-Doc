@@ -4,6 +4,7 @@ namespace romanzipp\ModelDoc\Providers;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use romanzipp\ModelDoc\Console\Commands\GenerateModelDocumentationCommand;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 
 class ModelDocServiceProvider extends ServiceProvider
@@ -31,6 +32,10 @@ class ModelDocServiceProvider extends ServiceProvider
             dirname(__DIR__) . '/../config/model-doc.php',
             'seo'
         );
+
+        $this->commands([
+            GenerateModelDocumentationCommand::class,
+        ]);
 
         $this->app->singleton(DocumentationGenerator::class, function (Application $app) {
             return new DocumentationGenerator();
