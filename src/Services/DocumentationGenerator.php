@@ -358,6 +358,12 @@ class DocumentationGenerator
      */
     public function generate(Model $model): void
     {
-        $this->writeDoc($model, $this->generateDocBlock($model));
+        $doc = $this->generateDocBlock($model);
+
+        if ($doc->isEmpty()) {
+            return;
+        }
+
+        $this->writeDoc($model, $doc);
     }
 }
