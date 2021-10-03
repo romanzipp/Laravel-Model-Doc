@@ -12,6 +12,9 @@ final class Model
 {
     private SplFileInfo $fileInfo;
 
+    /**
+     * @var \ReflectionClass<IlluminateModel>|null
+     */
     private ?ReflectionClass $reflectionClass = null;
 
     /**
@@ -68,6 +71,9 @@ final class Model
         return null;
     }
 
+    /**
+     * @return \ReflectionClass<IlluminateModel>
+     */
     public function getReflectionClass(): ReflectionClass
     {
         return $this->reflectionClass;

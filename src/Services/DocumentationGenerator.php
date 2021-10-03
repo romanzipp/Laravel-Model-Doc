@@ -24,6 +24,9 @@ use Symfony\Component\Finder\Finder;
 
 class DocumentationGenerator
 {
+    /**
+     * @return \Generator<\romanzipp\ModelDoc\Services\Objects\Model>
+     */
     public function collectModels(): Generator
     {
         $finder = new Finder();
@@ -41,7 +44,7 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      *
      * @return \ReflectionMethod[]
      */
@@ -179,12 +182,12 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
-     * @return array
+     * @return \gossi\docblock\tags\PropertyTag[]
      */
     private function getModelAttributesProperties(ReflectionClass $reflectionClass, IlluminateModel $model): array
     {
@@ -228,7 +231,7 @@ class DocumentationGenerator
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
-     * @return array
+     * @return array<string>
      */
     private function getTypesForTableColumn(IlluminateModel $model, Column $column): array
     {
