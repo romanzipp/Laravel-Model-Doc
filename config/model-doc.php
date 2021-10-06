@@ -11,6 +11,8 @@ return [
             // @property int|null $my_relation_counts
             'enabled' => true,
         ],
+
+        'base_model' => \Illuminate\Database\Eloquent\Model::class,
     ],
 
     'attributes' => [

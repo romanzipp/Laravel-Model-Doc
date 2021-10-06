@@ -90,20 +90,30 @@ class DocumentationGenerator
     private function getPropertiesForRelation(ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
     {
         $related = $relation->getRelated();
+        $relatedClass = get_class($related);
 
         $isMany = false;
 
-        foreach ([Relations\HasMany::class, Relations\HasManyThrough::class, Relations\MorphMany::class, Relations\BelongsToMany::class] as $relationClass) {
+        foreach ([
+            Relations\HasMany::class,
+            Relations\HasManyThrough::class,
+            Relations\MorphMany::class,
+            Relations\BelongsToMany::class,
+        ] as $relationClass) {
             $isMany = $isMany || $relation instanceof $relationClass;
+        }
+
+        if ($relation instanceof Relations\MorphTo) {
+            $relatedClass = config('model-doc.relations.base_model') ?? IlluminateModel::class;
         }
 
         $propertyReturns = $isMany
             ? [
                 '\\' . Collection::class,
-                '\\' . get_class($related) . '[]',
+                '\\' . $relatedClass . '[]',
             ]
             : [
-                '\\' . get_class($related),
+                '\\' . $relatedClass,
                 'null',
             ];
 
@@ -333,10 +343,6 @@ class DocumentationGenerator
             foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
                 /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
                 $relation = $instance->{$reflectionMethod->getName()}();
-
-                if ($relation instanceof Relations\MorphOneOrMany || $relation instanceof Relations\MorphTo) {
-                    continue; // TODO
-                }
 
                 foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
                     $doc->appendTag($property);

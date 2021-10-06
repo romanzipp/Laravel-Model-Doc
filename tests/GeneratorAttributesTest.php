@@ -10,7 +10,7 @@ class GeneratorAttributesTest extends TestCase
     public function testBasicAttributes()
     {
         $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
-            $this->getFile(__DIR__ . '/Support/Model.php')
+            $this->getFile(__DIR__ . '/Support/ModelBasic.php')
         ));
 
         self::assertDocBlock([
@@ -32,7 +32,7 @@ class GeneratorAttributesTest extends TestCase
         ]);
 
         $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
-            $this->getFile(__DIR__ . '/Support/Model.php')
+            $this->getFile(__DIR__ . '/Support/ModelBasic.php')
         ));
 
         self::assertDocBlock([
