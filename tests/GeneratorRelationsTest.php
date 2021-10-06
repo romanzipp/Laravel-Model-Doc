@@ -16,7 +16,7 @@ class GeneratorRelationsTest extends TestCase
         ]);
 
         $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
-            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+            $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
 
         self::assertDocBlock([
@@ -51,7 +51,7 @@ class GeneratorRelationsTest extends TestCase
         ]);
 
         $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
-            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+            $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
 
         self::assertDocBlock([
@@ -80,7 +80,7 @@ class GeneratorRelationsTest extends TestCase
         ]);
 
         $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
-            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+            $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
 
         self::assertDocBlock([
@@ -100,7 +100,7 @@ class GeneratorRelationsTest extends TestCase
         ]);
 
         (new DocumentationGenerator())->generateDocBlock(new Model(
-            $this->getFile(__DIR__ . '/Support/SimpleRelationsModel.php')
+            $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
     }
 }

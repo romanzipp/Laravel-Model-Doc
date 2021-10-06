@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations;
 use romanzipp\ModelDoc\Tests\Support\Related\RelatedModel;
 use romanzipp\ModelDoc\Tests\Support\Related\RelatedPivotModel;
 
-class SimpleRelationsModel extends Model
+class ModelSimpleRelations extends Model
 {
     public function belongsToRelation(): Relations\BelongsTo
     {

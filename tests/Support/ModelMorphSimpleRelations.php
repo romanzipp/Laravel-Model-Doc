@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use romanzipp\ModelDoc\Tests\Support\Related\RelatedModel;
 
-class MorphSimpleRelationsModel extends Model
+class ModelMorphSimpleRelations extends Model
 {
     public function morphToRelation(): Relations\MorphTo
     {

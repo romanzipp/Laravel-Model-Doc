@@ -2,9 +2,9 @@
 
 namespace romanzipp\ModelDoc\Tests\Support;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
-class BasicModel extends Model
+class Model extends EloquentModel
 {
     protected $table = 'table_one';
 }
