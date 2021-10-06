@@ -46,7 +46,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MyModel extends Model
 {
-    protected $table = 'models'; // 1. Add the corresponding talbtable name
+    protected $table = 'models'; // 1. Add the corresponding table name
     
     public function teams(): HasMany // 2. Add relation methods return types
     {
