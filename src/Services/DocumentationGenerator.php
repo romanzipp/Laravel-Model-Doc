@@ -133,11 +133,34 @@ class DocumentationGenerator
             '\\' . $reflectionClass->getName(),
         ];
 
+        $ignoreList = config('model-doc.scopes.ignore') ?? [];
+
+        $isIgnored = function (string $scopeName) use ($ignoreList): bool {
+            // Matches exact string
+            if (in_array($scopeName, $ignoreList, true)) {
+                return true;
+            }
+
+            foreach ($ignoreList as $ignore) {
+                // Is regex
+                if (Str::startsWith($ignore, '/') && 1 === preg_match($ignore, $scopeName)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
         foreach ($reflectionMethods as $reflectionMethod) {
             // $scopeName = "scopeWhereId"
             if (Str::startsWith($scopeName = $reflectionMethod->getName(), 'scope')) {
                 // $methodName = "whereId"
                 $methodName = lcfirst(Str::replaceFirst('scope', '', $scopeName));
+
+                if ($isIgnored($methodName)) {
+                    continue;
+                }
+
                 $methodName .= '(';
 
                 $methodParameters = [];

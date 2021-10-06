@@ -23,6 +23,10 @@ return [
     'scopes' => [
         // Enable generating model query scope methods
         'enabled' => true,
+        // Define certain scope methods that should be ignored (provide final method name without "scope" prefix)
+        'ignore' => [
+            // 'whereUuid',
+        ],
     ],
 
     'fail_when_empty' => false,
