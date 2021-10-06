@@ -118,7 +118,7 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      *
      * @return \gossi\docblock\tags\MethodTag[]
      */
@@ -173,6 +173,10 @@ class DocumentationGenerator
                     $parameter = '';
 
                     if (null !== ($reflectionType = $reflectionParameter->getType())) {
+                        if ( ! $reflectionType instanceof ReflectionNamedType) {
+                            continue;
+                        }
+
                         if ($reflectionType->allowsNull()) {
                             $parameter .= '?';
                         }
