@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/packagist/l/romanzipp/Laravel-Model-Doc.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-model-doc)
 [![GitHub Build Status](https://img.shields.io/github/workflow/status/romanzipp/Laravel-Model-Doc/Tests?style=flat-square)](https://github.com/romanzipp/Laravel-Model-Doc/actions)
 
-Generate PHPDoc comments for Laravel Models.
+Generate PHPDoc comments for Laravel Models including **columns**, **relations** and **scopes**.
 
 ## Contents
 
@@ -35,9 +35,8 @@ php artisan model-doc:generate
 
 ### Prepare your models
 
-#### Relations
-
-The package utilizes return types to identify realtions.
+1. Add the corresponding **table name**
+2. Add **relation** methods return **types** 
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -45,29 +44,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MyModel extends Model
 {
-    protected $table = 'models';
+    protected $table = 'models'; // 1. Add the corresponding talbtable name
     
-    public function teams(): HasMany
+    public function teams(): HasMany // 2. Add relation methods return types
     {
         return $this->hasMany(Team::class);
     }
 }
 ```
 
-
-
 ### Example
 
 ```php
-use Illuminate\Database\Eloquent\Model;
-
-class MyModel extends Model
-{
-    protected $table = 'models';
-}
-```
-
-```php
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -78,12 +67,29 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * 
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
+ * @property int|null $teams_count
+ * 
+ * @method static \Illuminate\Database\Eloquent\Builder whereTeamName(string $name)
  */
-class MyModel extends Model
+class MyUser extends Model
 {
-    protected $table = 'models';
+    protected $table = 'users';
+    
+    public function teams(): HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
+    
+    public function scopeWhereTeamName(Builder $builder, string $name)
+    {
+        // $builder->whereHas('teams', fn (Builder $builder) => $builder->where('name', $name));
+    }
 }
 ```
+
+See the [configuration file](config/model-doc.php) for more specific use cases.
 
 ## Testing
 
