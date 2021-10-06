@@ -44,6 +44,70 @@ class DocumentationGenerator
     }
 
     /**
+     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     *
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     *
+     * @return \gossi\docblock\Docblock
+     */
+    public function generateDocBlock(Model $model): Docblock
+    {
+        $doc = new Docblock();
+
+        $reflectionClass = $model->getReflectionClass();
+
+        // 1. Generate properties from database columns
+
+        if (true === config('model-doc.attributes.enabled') && ! $reflectionClass->isAbstract()) {
+            try {
+                /** @var \Illuminate\Database\Eloquent\Model $instance */
+                $instance = $reflectionClass->newInstance();
+            } catch (ReflectionException $exception) {
+                throw new ModelDocumentationFailedException('Can not create model instance', 0, $exception);
+            }
+
+            foreach ($this->getModelAttributesProperties($reflectionClass, $instance) as $property) {
+                $doc->appendTag($property);
+            }
+        }
+
+        // 2. Generate properties from relation methods
+
+        if (isset($instance) && true === config('model-doc.relations.enabled')) {
+            foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
+                /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
+                $relation = $instance->{$reflectionMethod->getName()}();
+
+                foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
+                    $doc->appendTag($property);
+                }
+            }
+        }
+
+        if (true === config('model-doc.fail_when_empty') && $doc->getTags()->isEmpty()) {
+            throw new ModelDocumentationFailedException('The tag is empty');
+        }
+
+        return $doc;
+    }
+
+    /**
+     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     *
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     */
+    public function generate(Model $model): void
+    {
+        $doc = $this->generateDocBlock($model);
+
+        if ($doc->isEmpty()) {
+            return;
+        }
+
+        $this->writeDoc($model, $doc);
+    }
+
+    /**
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      *
      * @return \ReflectionMethod[]
@@ -307,69 +371,5 @@ class DocumentationGenerator
         }
 
         return $types;
-    }
-
-    /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
-     *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
-     *
-     * @return \gossi\docblock\Docblock
-     */
-    public function generateDocBlock(Model $model): Docblock
-    {
-        $doc = new Docblock();
-
-        $reflectionClass = $model->getReflectionClass();
-
-        // 1. Generate properties from database columns
-
-        if (true === config('model-doc.attributes.enabled') && ! $reflectionClass->isAbstract()) {
-            try {
-                /** @var \Illuminate\Database\Eloquent\Model $instance */
-                $instance = $reflectionClass->newInstance();
-            } catch (ReflectionException $exception) {
-                throw new ModelDocumentationFailedException('Can not create model instance', 0, $exception);
-            }
-
-            foreach ($this->getModelAttributesProperties($reflectionClass, $instance) as $property) {
-                $doc->appendTag($property);
-            }
-        }
-
-        // 2. Generate properties from relation methods
-
-        if (isset($instance) && true === config('model-doc.relations.enabled')) {
-            foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
-                /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
-                $relation = $instance->{$reflectionMethod->getName()}();
-
-                foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
-                    $doc->appendTag($property);
-                }
-            }
-        }
-
-        if (true === config('model-doc.fail_when_empty') && $doc->getTags()->isEmpty()) {
-            throw new ModelDocumentationFailedException('The tag is empty');
-        }
-
-        return $doc;
-    }
-
-    /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
-     *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
-     */
-    public function generate(Model $model): void
-    {
-        $doc = $this->generateDocBlock($model);
-
-        if ($doc->isEmpty()) {
-            return;
-        }
-
-        $this->writeDoc($model, $doc);
     }
 }
