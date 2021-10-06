@@ -7,7 +7,9 @@ use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types;
 use Generator;
 use gossi\docblock\Docblock;
+use gossi\docblock\tags\MethodTag;
 use gossi\docblock\tags\PropertyTag;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Database\Eloquent\Relations;
@@ -84,6 +86,14 @@ class DocumentationGenerator
             }
         }
 
+        // 3. Generate method from query scopes (https://laravel.com/docs/8.x/eloquent#query-scopes)
+
+        if (isset($instance) && true === config('model-doc.scopes.enabled')) {
+            foreach ($this->getQueryScopeMethods($reflectionClass) as $property) {
+                $doc->appendTag($property);
+            }
+        }
+
         if (true === config('model-doc.fail_when_empty') && $doc->getTags()->isEmpty()) {
             throw new ModelDocumentationFailedException('The tag is empty');
         }
@@ -105,6 +115,70 @@ class DocumentationGenerator
         }
 
         $this->writeDoc($model, $doc);
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return \gossi\docblock\tags\MethodTag[]
+     */
+    private function getQueryScopeMethods(ReflectionClass $reflectionClass): array
+    {
+        $reflectionMethods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+        $methods = [];
+
+        $scopeReturns = [
+            '\\' . Builder::class,
+            '\\' . $reflectionClass->getName(),
+        ];
+
+        foreach ($reflectionMethods as $reflectionMethod) {
+            // $scopeName = "scopeWhereId"
+            if (Str::startsWith($scopeName = $reflectionMethod->getName(), 'scope')) {
+                // $methodName = "whereId"
+                $methodName = lcfirst(Str::replaceFirst('scope', '', $scopeName));
+                $methodName .= '(';
+
+                $methodParameters = [];
+
+                foreach ($reflectionMethod->getParameters() as $index => $reflectionParameter) {
+                    if (0 === $index) {
+                        continue; // First parameter is query builder instance
+                    }
+
+                    $parameter = '';
+
+                    if (null !== ($reflectionType = $reflectionParameter->getType())) {
+                        if ($reflectionType->allowsNull()) {
+                            $parameter .= '?';
+                        }
+
+                        if ($reflectionType->isBuiltin()) {
+                            $parameter .= $reflectionType->getName();
+                        } else {
+                            $parameter .= '\\' . $reflectionType->getName();
+                        }
+
+                        $parameter .= ' ';
+                    }
+                    $parameter .= '$' . $reflectionParameter->getName();
+
+                    $methodParameters[] = $parameter;
+                }
+
+                $methodName .= implode(', ', $methodParameters);
+                $methodName .= ')';
+
+                $method = new MethodTag();
+                $method->setType('static ' . implode('|', $scopeReturns));
+                $method->setDescription($methodName);
+
+                $methods[] = $method;
+            }
+        }
+
+        return $methods;
     }
 
     /**

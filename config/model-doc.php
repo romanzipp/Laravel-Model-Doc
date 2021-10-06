@@ -20,5 +20,10 @@ return [
         'enabled' => true,
     ],
 
+    'scopes' => [
+        // Enable generating model query scope methods
+        'enabled' => true,
+    ],
+
     'fail_when_empty' => false,
 ];
