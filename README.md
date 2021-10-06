@@ -33,6 +33,8 @@ php artisan vendor:publish --provider="romanzipp\ModelDoc\Providers\ModelDocServ
 php artisan model-doc:generate
 ```
 
+See the [configuration file](config/model-doc.php) for more specific use cases.
+
 ### Prepare your models
 
 1. Add the corresponding **table name**
