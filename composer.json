@@ -13,9 +13,9 @@
     "require": {
         "php": "^7.4|^8.0",
         "doctrine/dbal": "^3.0|^2.9",
-        "gossi/docblock": "^2.0",
         "illuminate/console": "^8.0",
-        "illuminate/support": "^8.0"
+        "illuminate/support": "^8.0",
+        "phpowermove/docblock": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
