@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/packagist/l/romanzipp/Laravel-Model-Doc.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-model-doc)
 [![GitHub Build Status](https://img.shields.io/github/workflow/status/romanzipp/Laravel-Model-Doc/Tests?style=flat-square)](https://github.com/romanzipp/Laravel-Model-Doc/actions)
 
-Generate PHPDoc comments for Laravel Models including **columns**, **relations** and **scopes**.
+Generate PHPDoc comments for Laravel Models including [**database columns**](https://laravel.com/docs/8.x/eloquent), [**relationships**](https://laravel.com/docs/8.x/eloquent-relationships), [**accessors**](https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators) and [**query scopes**](https://laravel.com/docs/8.x/eloquent#query-scopes).
 
 ## Contents
 
@@ -64,6 +64,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property string $id
  * @property string $title
+ * @property string $pretty_title
  * @property string|null $icon
  * @property int $order
  * @property bool $enabled
@@ -86,7 +87,12 @@ class MyUser extends Model
     
     public function scopeWhereTeamName(Builder $builder, string $name)
     {
-        // $builder->whereHas('teams', fn (Builder $builder) => $builder->where('name', $name));
+        $builder->where('name', $name);
+    }
+    
+    public function getPrettyTitleAttribute(): string
+    {
+        return ucfirst($this->title);
     }
 }
 ```
