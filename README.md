@@ -11,6 +11,7 @@ Generate PHPDoc comments for Laravel Models including [**database columns**](htt
 
 - [Installation](#installation)
 - [Configuration](#configuration)
+- [Features](#features)
 - [Testing](#testing)
 
 ## Installation
@@ -101,10 +102,14 @@ See the [configuration file](config/model-doc.php) for more specific use cases.
 
 ## Features
 
-- [x] Generate relationships 
-- [x] Generate from attributes 
-- [ ] Recognize casts
-- [ ] Generate properties from accessors
+- [x] Generate `@property` tags from attributes
+- [ ] Look for attributes type casts
+- [x] Generate `@method` tags from relationships
+- [x] Generate `@property` tags from relationships
+- [x] Generate `@property` tags from relationship counts
+- [x] Generate `@method` tags query scopes
+- [x] Generate `@property` tags from accessors
+- [ ] Only generate `@property-readonly` if accessor has no real attribute or mutator
 
 ## Testing
 
