@@ -73,7 +73,15 @@ class DocumentationGenerator
             }
         }
 
-        // 2. Generate properties from relation methods
+        // 2. Generate properties from model accessors
+
+        if (true === config('model-doc.accessors.enabled')) {
+            foreach ($this->getModelAccessors($reflectionClass) as $property) {
+                $doc->appendTag($property);
+            }
+        }
+
+        // 3. Generate properties from relation methods
 
         if (isset($instance) && true === config('model-doc.relations.enabled')) {
             foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
@@ -86,7 +94,7 @@ class DocumentationGenerator
             }
         }
 
-        // 3. Generate method from query scopes (https://laravel.com/docs/8.x/eloquent#query-scopes)
+        // 4. Generate method from query scopes (https://laravel.com/docs/8.x/eloquent#query-scopes)
 
         if (isset($instance) && true === config('model-doc.scopes.enabled')) {
             foreach ($this->getQueryScopeMethods($reflectionClass) as $property) {
@@ -115,6 +123,35 @@ class DocumentationGenerator
         }
 
         $this->writeDoc($model, $doc);
+    }
+
+    /**
+     * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
+     *
+     * @return Generator<\gossi\docblock\tags\PropertyTag>
+     */
+    public function getModelAccessors(ReflectionClass $reflectionClass): Generator
+    {
+        foreach ($reflectionClass->getMethods() as $method) {
+            $matches = [];
+
+            if ( ! preg_match('/^get([A-z0-9_]+)Attribute$/', $method->getName(), $matches)) {
+                continue;
+            }
+
+            $tag = new PropertyTag();
+            $tag->setVariable(Str::snake($matches[1]));
+
+            $returnType = 'mixed';
+
+            if (($reflectionType = $method->getReturnType()) !== null && ($typeReturn = self::getReflectionTypeDocReturn($reflectionType))) {
+                $returnType = $typeReturn;
+            }
+
+            $tag->setType($returnType);
+
+            yield $tag;
+        }
     }
 
     /**
@@ -173,20 +210,7 @@ class DocumentationGenerator
                     $parameter = '';
 
                     if (null !== ($reflectionType = $reflectionParameter->getType())) {
-                        if ( ! $reflectionType instanceof ReflectionNamedType) {
-                            continue;
-                        }
-
-                        if ($reflectionType->allowsNull()) {
-                            $parameter .= '?';
-                        }
-
-                        if ($reflectionType->isBuiltin()) {
-                            $parameter .= $reflectionType->getName();
-                        } else {
-                            $parameter .= '\\' . $reflectionType->getName();
-                        }
-
+                        $parameter .= self::getReflectionTypeDocReturn($reflectionType);
                         $parameter .= ' ';
                     }
                     $parameter .= '$' . $reflectionParameter->getName();
@@ -472,5 +496,26 @@ class DocumentationGenerator
         }
 
         return $types;
+    }
+
+    private static function getReflectionTypeDocReturn(\ReflectionType $reflectionType): ?string
+    {
+        $parameter = '';
+
+        if ( ! $reflectionType instanceof ReflectionNamedType) {
+            return null;
+        }
+
+        if ($reflectionType->allowsNull()) {
+            $parameter .= '?';
+        }
+
+        if ($reflectionType->isBuiltin()) {
+            $parameter .= $reflectionType->getName();
+        } else {
+            $parameter .= '\\' . $reflectionType->getName();
+        }
+
+        return $parameter;
     }
 }

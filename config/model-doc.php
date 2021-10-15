@@ -1,8 +1,8 @@
 <?php
 
 return [
+    // Generate PHPDoc properties for relation methods
     'relations' => [
-        // Enable generating PHPDoc properties for relation methods
         // @property MyRelatedModel|null $myRelation
         'enabled' => true,
 
@@ -16,13 +16,18 @@ return [
         'base_model' => \Illuminate\Database\Eloquent\Model::class,
     ],
 
+    // Generate PHPDoc properties for database columns
     'attributes' => [
-        // Enable generating PHPDoc properties for database columns
         'enabled' => true,
     ],
 
+    // Generate properties for model accessors like `getTitleAttribute`
+    'accessors' => [
+        'enabled' => true,
+    ],
+
+    // Generate model query scope methods. Only looks for existing method prefixed with "scope"
     'scopes' => [
-        // Enable generating model query scope methods. Only looks for existing method prefixed with "scope"
         // @method static \Illuminate\Database\Eloquent\Builder whereId(int $id)',
         'enabled' => true,
         // Define certain scope methods that should be ignored (provide final method name without "scope" prefix)

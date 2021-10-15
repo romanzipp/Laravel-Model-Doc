@@ -17,6 +17,8 @@ final class Model
      */
     private ?ReflectionClass $reflectionClass = null;
 
+    private IlluminateModel $modelInstance;
+
     /**
      * Model constructor.
      *
@@ -40,10 +42,10 @@ final class Model
             $this->load();
         }
 
+        $qualifiedClassName = $this->getQualifiedClassName();
+
         try {
-            $this->reflectionClass = new ReflectionClass(
-                $this->getQualifiedClassName()
-            );
+            $this->reflectionClass = new ReflectionClass($qualifiedClassName);
         } catch (ReflectionException $exception) {
             throw new InvalidModelException('Could not create reflection class');
         }
@@ -51,6 +53,13 @@ final class Model
         if ( ! $this->reflectionClass->isSubclassOf(IlluminateModel::class)) {
             throw new InvalidModelException('Class does not extend Illuminate\Database\Eloquent\Model');
         }
+
+        $this->modelInstance = new $qualifiedClassName();
+    }
+
+    public function getInstance(): IlluminateModel
+    {
+        return $this->modelInstance;
     }
 
     public function fileExists(): bool
