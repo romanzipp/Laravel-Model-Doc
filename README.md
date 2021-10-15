@@ -53,6 +53,11 @@ class MyModel extends Model
     {
         return $this->hasMany(Team::class);
     }
+    
+    public function getNameAttribute(): string // 3. Add accessor methods return types
+    {
+        return ucfirst($this->name);
+    }
 }
 ```
 
@@ -104,6 +109,7 @@ See the [configuration file](config/model-doc.php) for more specific use cases.
 
 - [x] Generate `@property` tags from attributes
 - [ ] Look for attributes type casts
+- [x] Do not generate attribute `@property` tag if accessor exists
 - [x] Generate `@method` tags from relationships
 - [x] Generate `@property` tags from relationships
 - [x] Generate `@property` tags from relationship counts
