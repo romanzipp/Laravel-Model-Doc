@@ -77,30 +77,30 @@ use Illuminate\Database\Eloquent\Model;
  * @property array $children
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * 
+ *
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
  * @property int|null $teams_count
- * 
+ *
  * @method static \Illuminate\Database\Eloquent\Builder whereTeamName(string $name)
  */
 class MyUser extends Model
 {
     protected $table = 'users';
-    
+
     protected $casts = [
         'children' => 'array',
     ];
-    
+
     public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
     }
-    
+
     public function scopeWhereTeamName(Builder $builder, string $name)
     {
         $builder->where('name', $name);
     }
-    
+
     public function getPrettyTitleAttribute(): string
     {
         return ucfirst($this->title);
