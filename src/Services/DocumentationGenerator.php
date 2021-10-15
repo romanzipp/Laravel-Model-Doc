@@ -54,7 +54,7 @@ class DocumentationGenerator
      */
     public function generateDocBlock(Model $model): Docblock
     {
-        $doc = new Docblock();
+        $tags = [];
 
         $reflectionClass = $model->getReflectionClass();
 
@@ -69,7 +69,7 @@ class DocumentationGenerator
             }
 
             foreach ($this->getModelAttributesProperties($reflectionClass, $instance) as $property) {
-                $doc->appendTag($property);
+                $tags[] = $property;
             }
         }
 
@@ -77,7 +77,7 @@ class DocumentationGenerator
 
         if (true === config('model-doc.accessors.enabled')) {
             foreach ($this->getModelAccessors($reflectionClass) as $property) {
-                $doc->appendTag($property);
+                $tags[] = $property;
             }
         }
 
@@ -89,7 +89,7 @@ class DocumentationGenerator
                 $relation = $instance->{$reflectionMethod->getName()}();
 
                 foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
-                    $doc->appendTag($property);
+                    $tags[] = $property;
                 }
             }
         }
@@ -98,12 +98,38 @@ class DocumentationGenerator
 
         if (isset($instance) && true === config('model-doc.scopes.enabled')) {
             foreach ($this->getQueryScopeMethods($reflectionClass) as $property) {
-                $doc->appendTag($property);
+                $tags[] = $property;
             }
         }
 
-        if (true === config('model-doc.fail_when_empty') && $doc->getTags()->isEmpty()) {
+        if (true === config('model-doc.fail_when_empty') && empty($tags)) {
             throw new ModelDocumentationFailedException('The tag is empty');
+        }
+
+        $properties = [];
+        $methods = [];
+
+        foreach ($tags as $index => $tag) {
+            if ($tag instanceof PropertyTag) {
+                if ($found = ($properties[$tag->getVariable()] ?? null)) {
+                    unset($tags[$found]);
+                }
+
+                $properties[$tag->getVariable()] = $index;
+            }
+
+            if ($tag instanceof MethodTag) {
+                if ($found = ($methods[$tag->getDescription()] ?? null)) {
+                    unset($tags[$found]);
+                }
+
+                $methods[$tag->getDescription()] = $index;
+            }
+        }
+
+        $doc = new Docblock();
+        foreach ($tags as $tag) {
+            $doc->appendTag($tag);
         }
 
         return $doc;
