@@ -106,28 +106,24 @@ class DocumentationGenerator
             throw new ModelDocumentationFailedException('The tag is empty');
         }
 
-        $properties = [];
-        $methods = [];
+        $uniques = [];
 
         foreach ($tags as $index => $tag) {
-            if ($tag instanceof PropertyTag) {
-                if ($found = ($properties[$tag->getVariable()] ?? null)) {
-                    unset($tags[$found]);
-                }
-
-                $properties[$tag->getVariable()] = $index;
+            if ( ! isset($uniques[$class = get_class($tag)])) {
+                $uniques[$class] = [];
             }
 
-            if ($tag instanceof MethodTag) {
-                if ($found = ($methods[$tag->getDescription()] ?? null)) {
-                    unset($tags[$found]);
-                }
+            $identifier = $tag instanceof MethodTag ? $tag->getDescription() : $tag->getVariable();
 
-                $methods[$tag->getDescription()] = $index;
+            if (isset($uniques[$class][$identifier])) {
+                unset($tags[$uniques[$class][$identifier]]);
             }
+
+            $properties[$identifier] = $index;
         }
 
         $doc = new Docblock();
+
         foreach ($tags as $tag) {
             $doc->appendTag($tag);
         }
