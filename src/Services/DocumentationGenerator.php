@@ -421,7 +421,7 @@ class DocumentationGenerator
             }
 
             $property = new PropertyTag();
-            $property->setVariable($variable = "\${$tableColumn->getName()}");
+            $property->setVariable("\${$tableColumn->getName()}");
 
             $types = $this->getTypesForTableColumn($model, $tableColumn);
 
