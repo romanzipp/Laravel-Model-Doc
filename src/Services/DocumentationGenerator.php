@@ -115,11 +115,11 @@ class DocumentationGenerator
 
             $identifier = $tag instanceof MethodTag ? $tag->getDescription() : $tag->getVariable();
 
-            if (isset($uniques[$class][$identifier])) {
-                unset($tags[$uniques[$class][$identifier]]);
+            if ($found = ($uniques[$class][$identifier] ?? null)) {
+                unset($tags[$found]);
             }
 
-            $properties[$identifier] = $index;
+            $uniques[$class][$identifier] = $index;
         }
 
         $doc = new Docblock();
