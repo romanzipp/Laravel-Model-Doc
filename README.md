@@ -74,6 +74,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $icon
  * @property int $order
  * @property bool $enabled
+ * @property array $children
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * 
@@ -85,6 +86,10 @@ use Illuminate\Database\Eloquent\Model;
 class MyUser extends Model
 {
     protected $table = 'users';
+    
+    protected $casts = [
+        'children' => 'array',
+    ];
     
     public function teams(): HasMany
     {
