@@ -99,6 +99,13 @@ class MyUser extends Model
 
 See the [configuration file](config/model-doc.php) for more specific use cases.
 
+## Features
+
+- [x] Generate relationships 
+- [x] Generate from attributes 
+- [ ] Recognize casts
+- [ ] Generate properties from accessors
+
 ## Testing
 
 ```
