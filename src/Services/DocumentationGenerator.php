@@ -504,7 +504,7 @@ class DocumentationGenerator
                     $types[] = 'bool';
                     break;
                 default:
-                    $types[] = config('model-doc.attributes.fallback_type') ? 'mixed' : '\\' . $typeClass;
+                    $types[] = config('model-doc.attributes.fallback_type') ? '\\' . $typeClass : 'mixed';
             }
         }
 
