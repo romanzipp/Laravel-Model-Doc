@@ -44,6 +44,10 @@ class TestCase extends BaseTestCase
             $table->boolean('column_boolean');
             $table->boolean('column_boolean_nullable')->nullable();
         });
+
+        $app['db']->connection()->getSchemaBuilder()->create('table_special', function (Blueprint $table) {
+            $table->enum('column_enum', ['one', 'two']);
+        });
     }
 
     protected static function assertDocBlock(array $expected, Docblock $actual): void

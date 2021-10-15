@@ -486,7 +486,7 @@ class DocumentationGenerator
         }
 
         if (empty($types)) {
-            switch (get_class($column->getType())) {
+            switch ($typeClass = get_class($column->getType())) {
                 case Types\IntegerType::class:
                 case Types\BigIntType::class:
                     $types[] = 'int';
@@ -503,6 +503,8 @@ class DocumentationGenerator
                 case Types\BooleanType::class:
                     $types[] = 'bool';
                     break;
+                default:
+                    $types[] = config('model-doc.attributes.fallback_type') ? 'mixed' : '\\' . $typeClass;
             }
         }
 

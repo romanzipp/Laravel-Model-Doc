@@ -19,6 +19,9 @@ return [
     // Generate PHPDoc properties for database columns
     'attributes' => [
         'enabled' => true,
+
+        // Use dbal class type if col type not mapped
+        'fallback_type' => false,
     ],
 
     // Generate properties for model accessors like `getTitleAttribute`

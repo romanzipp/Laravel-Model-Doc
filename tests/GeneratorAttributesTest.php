@@ -58,4 +58,17 @@ class GeneratorAttributesTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testSpecialModelTypes()
+    {
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelSpecialAttributes.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property string $column_enum',
+            ' */',
+        ], $doc);
+    }
 }
