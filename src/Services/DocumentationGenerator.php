@@ -487,23 +487,23 @@ class DocumentationGenerator
 
         if (empty($types)) {
             switch (get_class($column->getType())) {
-                    case Types\IntegerType::class:
-                    case Types\BigIntType::class:
-                        $types[] = 'int';
-                        break;
-                    case Types\FloatType::class:
-                        $types[] = 'float';
-                        break;
-                    case Types\StringType::class:
-                    case Types\TextType::class:
-                    case Types\JsonType::class:
-                    case Types\DateTimeType::class:
-                        $types[] = 'string';
-                        break;
-                    case Types\BooleanType::class:
-                        $types[] = 'bool';
-                        break;
-                }
+                case Types\IntegerType::class:
+                case Types\BigIntType::class:
+                    $types[] = 'int';
+                    break;
+                case Types\FloatType::class:
+                    $types[] = 'float';
+                    break;
+                case Types\StringType::class:
+                case Types\TextType::class:
+                case Types\JsonType::class:
+                case Types\DateTimeType::class:
+                    $types[] = 'string';
+                    break;
+                case Types\BooleanType::class:
+                    $types[] = 'bool';
+                    break;
+            }
         }
 
         if (false === $column->getNotnull()) {
