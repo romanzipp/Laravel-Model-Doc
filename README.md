@@ -108,7 +108,7 @@ See the [configuration file](config/model-doc.php) for more specific use cases.
 ## Features
 
 - [x] Generate `@property` tags from attributes
-- [ ] Look for attributes type casts
+- [x] Look for attributes type casts
 - [x] Do not generate attribute `@property` tag if accessor exists
 - [x] Generate `@method` tags from relationships
 - [x] Generate `@property` tags from relationships
