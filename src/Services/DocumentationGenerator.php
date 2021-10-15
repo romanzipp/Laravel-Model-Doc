@@ -128,7 +128,7 @@ class DocumentationGenerator
     /**
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      *
-     * @return Generator<\gossi\docblock\tags\PropertyTag>
+     * @return \Generator<\gossi\docblock\tags\PropertyTag>
      */
     public function getModelAccessors(ReflectionClass $reflectionClass): Generator
     {
@@ -157,13 +157,11 @@ class DocumentationGenerator
     /**
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      *
-     * @return \gossi\docblock\tags\MethodTag[]
+     * @return \Generator<\gossi\docblock\tags\MethodTag>
      */
-    private function getQueryScopeMethods(ReflectionClass $reflectionClass): array
+    private function getQueryScopeMethods(ReflectionClass $reflectionClass): Generator
     {
         $reflectionMethods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-        $methods = [];
 
         $scopeReturns = [
             '\\' . Builder::class,
@@ -225,11 +223,9 @@ class DocumentationGenerator
                 $method->setType('static ' . implode('|', $scopeReturns));
                 $method->setDescription($methodName);
 
-                $methods[] = $method;
+                yield $method;
             }
         }
-
-        return $methods;
     }
 
     /**
@@ -386,12 +382,10 @@ class DocumentationGenerator
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
-     * @return \gossi\docblock\tags\PropertyTag[]
+     * @return \Generator<\gossi\docblock\tags\PropertyTag>
      */
-    private function getModelAttributesProperties(ReflectionClass $reflectionClass, IlluminateModel $model): array
+    private function getModelAttributesProperties(ReflectionClass $reflectionClass, IlluminateModel $model): Generator
     {
-        $properties = [];
-
         $connection = $model->getConnection();
 
         $schemaManager = $connection->getDoctrineSchemaManager();
@@ -418,10 +412,8 @@ class DocumentationGenerator
                 $property->setDescription($comment);
             }
 
-            $properties[] = $property;
+            yield $property;
         }
-
-        return $properties;
     }
 
     /**
