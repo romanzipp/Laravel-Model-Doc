@@ -17,7 +17,7 @@ final class Model
      */
     private ?ReflectionClass $reflectionClass = null;
 
-    private IlluminateModel $modelInstance;
+    private ?IlluminateModel $modelInstance = null;
 
     /**
      * Model constructor.
@@ -54,10 +54,12 @@ final class Model
             throw new InvalidModelException('Class does not extend Illuminate\Database\Eloquent\Model');
         }
 
-        $this->modelInstance = new $qualifiedClassName();
+        if ( ! $this->reflectionClass->isAbstract()) {
+            $this->modelInstance = new $qualifiedClassName();
+        }
     }
 
-    public function getInstance(): IlluminateModel
+    public function getInstance(): ?IlluminateModel
     {
         return $this->modelInstance;
     }
