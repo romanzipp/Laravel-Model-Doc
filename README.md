@@ -40,6 +40,7 @@ See the [configuration file](config/model-doc.php) for more specific use cases.
 
 1. Add the corresponding **table name**
 2. Add **relation** methods return **types** 
+3. Add **accessor** methods return **types**
 
 ```php
 use Illuminate\Database\Eloquent\Model;
