@@ -40,4 +40,22 @@ class GeneratorAttributesTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testAttributesCasted()
+    {
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelBasicWithCasts.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property string $column_integer',
+            ' * @property string|null $column_integer_nullable',
+            ' * @property string $column_string',
+            ' * @property string|null $column_string_nullable',
+            ' * @property bool $column_boolean',
+            ' * @property bool|null $column_boolean_nullable',
+            ' */',
+        ], $doc);
+    }
 }

@@ -416,14 +416,24 @@ class DocumentationGenerator
         }
 
         foreach ($tableColumns as $tableColumn) {
-            if ($hasAccessor($tableColumn->getName())) {
+            $name = $tableColumn->getName();
+
+            if ($hasAccessor($name)) {
                 continue;
             }
 
             $property = new PropertyTag();
-            $property->setVariable("\${$tableColumn->getName()}");
+            $property->setVariable("\${$name}");
 
             $types = $this->getTypesForTableColumn($model, $tableColumn);
+
+            if ($model->hasCast($name) && ! empty($castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])])) {
+                if (in_array('null', $types)) {
+                    $castedTypes[] = 'null';
+                }
+
+                $types = $castedTypes;
+            }
 
             if ( ! empty($types)) {
                 $property->setType(
@@ -449,13 +459,7 @@ class DocumentationGenerator
      */
     private function getTypesForTableColumn(IlluminateModel $model, Column $column): array
     {
-        $castsMapping = [
-            'json' => 'array',
-        ];
-
         $types = [];
-
-        $casts = $model->getCasts();
 
         if (method_exists($model, 'getStates')) {
             foreach ($model::getStates() as $stateAttribute => $state) {
@@ -482,10 +486,7 @@ class DocumentationGenerator
         }
 
         if (empty($types)) {
-            if (array_key_exists($column->getName(), $casts) && array_key_exists($casts[$column->getName()], $castsMapping)) {
-                $types[] = $castsMapping[$casts[$column->getName()]];
-            } else {
-                switch (get_class($column->getType())) {
+            switch (get_class($column->getType())) {
                     case Types\IntegerType::class:
                     case Types\BigIntType::class:
                         $types[] = 'int';
@@ -503,7 +504,6 @@ class DocumentationGenerator
                         $types[] = 'bool';
                         break;
                 }
-            }
         }
 
         if (false === $column->getNotnull()) {
@@ -532,5 +532,48 @@ class DocumentationGenerator
         }
 
         return $parameter;
+    }
+
+    /**
+     * @internal
+     *
+     * @param string $castType
+     *
+     * @return string
+     */
+    public static function getReturnTypeForCast(string $castType): ?string
+    {
+        switch ($castType) {
+            case 'int':
+            case 'integer':
+                return 'int';
+            case 'real':
+            case 'float':
+            case 'double':
+            case 'decimal':
+                return 'float';
+            case 'string':
+                return 'string';
+            case 'bool':
+            case 'boolean':
+                return 'bool';
+            case 'object':
+                return '\stdClass';
+            case 'array':
+            case 'json':
+                return 'array';
+            case 'collection':
+                return '\\' . \Illuminate\Support\Collection::class;
+            case 'date':
+            case 'datetime':
+            case 'custom_datetime':
+            case 'immutable_date':
+            case 'immutable_custom_datetime':
+            case 'immutable_datetime':
+            case 'timestamp':
+                return '\\' . \Carbon\Carbon::class;
+        }
+
+        return null;
     }
 }
