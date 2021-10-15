@@ -29,4 +29,28 @@ class GeneratorAccessorsTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testNoDuplicates()
+    {
+        config([
+            'model-doc.relations.enabled' => false,
+            'model-doc.attributes.enabled' => true,
+            'model-doc.accessors.enabled' => true,
+        ]);
+
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelAccessorsDuplicateAttribute.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property int $column_integer',
+            ' * @property int|null $column_integer_nullable',
+            ' * @property string|null $column_string_nullable',
+            ' * @property bool $column_boolean',
+            ' * @property bool|null $column_boolean_nullable',
+            ' * @property int $column_string',
+            ' */',
+        ], $doc);
+    }
 }

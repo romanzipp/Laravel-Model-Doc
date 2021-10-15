@@ -386,6 +386,25 @@ class DocumentationGenerator
      */
     private function getModelAttributesProperties(ReflectionClass $reflectionClass, IlluminateModel $model): Generator
     {
+        /**
+         * @var \gossi\docblock\tags\PropertyTag[] $accessors
+         */
+        $accessors = [];
+
+        if (true === config('model-doc.accessors.enabled')) {
+            $accessors = iterator_to_array($this->getModelAccessors($reflectionClass));
+        }
+
+        $hasAccessor = function (string $variable) use ($accessors) {
+            foreach ($accessors as $accessor) {
+                if ($accessor->getVariable() === $variable) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
         $connection = $model->getConnection();
 
         $schemaManager = $connection->getDoctrineSchemaManager();
@@ -397,8 +416,12 @@ class DocumentationGenerator
         }
 
         foreach ($tableColumns as $tableColumn) {
+            if ($hasAccessor($tableColumn->getName())) {
+                continue;
+            }
+
             $property = new PropertyTag();
-            $property->setVariable("\${$tableColumn->getName()}");
+            $property->setVariable($variable = "\${$tableColumn->getName()}");
 
             $types = $this->getTypesForTableColumn($model, $tableColumn);
 
