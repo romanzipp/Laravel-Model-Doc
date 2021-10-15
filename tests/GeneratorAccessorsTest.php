@@ -30,7 +30,7 @@ class GeneratorAccessorsTest extends TestCase
         ], $doc);
     }
 
-    public function testNoDuplicates()
+    public function testDontGenerateAttributeTagIfAccessorExists()
     {
         config([
             'model-doc.relations.enabled' => false,
