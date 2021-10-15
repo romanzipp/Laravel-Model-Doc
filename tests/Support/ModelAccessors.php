@@ -27,4 +27,9 @@ class ModelAccessors extends EloquentModel
     {
         return [];
     }
+
+    public function getSomeInstanceAttribute(): ClassNotExtendingIlluminateModel
+    {
+        return new ClassNotExtendingIlluminateModel();
+    }
 }
