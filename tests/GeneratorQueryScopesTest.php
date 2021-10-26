@@ -7,7 +7,7 @@ use romanzipp\ModelDoc\Services\Objects\Model;
 
 class GeneratorQueryScopesTest extends TestCase
 {
-    public function testMorphRelations()
+    public function testScopes()
     {
         config([
             'model-doc.relations.enabled' => false,
@@ -35,12 +35,13 @@ class GeneratorQueryScopesTest extends TestCase
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultInt(int $id = 69)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultFloat(float $id = 69.1)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultString(string $id = \'69\')',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultArray(array $id = [])',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultNull(?string $id = null)',
             ' */',
         ], $doc);
     }
 
-    public function testMorphRelationsIgnoreSpecific()
+    public function testScopesIgnoreSpecific()
     {
         config([
             'model-doc.relations.enabled' => false,
@@ -69,12 +70,13 @@ class GeneratorQueryScopesTest extends TestCase
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultInt(int $id = 69)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultFloat(float $id = 69.1)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultString(string $id = \'69\')',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultArray(array $id = [])',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultNull(?string $id = null)',
             ' */',
         ], $doc);
     }
 
-    public function testMorphRelationsIgnoreWildcard()
+    public function testScopesIgnoreWildcard()
     {
         config([
             'model-doc.relations.enabled' => false,
@@ -103,6 +105,7 @@ class GeneratorQueryScopesTest extends TestCase
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultInt(int $id = 69)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultFloat(float $id = 69.1)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultString(string $id = \'69\')',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultArray(array $id = [])',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultNull(?string $id = null)',
             ' */',
         ], $doc);
