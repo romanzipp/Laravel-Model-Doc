@@ -61,4 +61,24 @@ class ModelQueryScopes extends EloquentModel
     {
         $builder->where('id', $user->id)->where('id', $otherUser->id);
     }
+
+    public function scopeWhereParameterDefaultInt(Builder $builder, int $id = 69)
+    {
+        $builder->where('id', $id);
+    }
+
+    public function scopeWhereParameterDefaultFloat(Builder $builder, float $id = 69.1)
+    {
+        $builder->where('id', $id);
+    }
+
+    public function scopeWhereParameterDefaultString(Builder $builder, string $id = '69')
+    {
+        $builder->where('id', $id);
+    }
+
+    public function scopeWhereParameterDefaultNull(Builder $builder, string $id = null)
+    {
+        $builder->where('id', $id);
+    }
 }

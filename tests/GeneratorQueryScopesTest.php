@@ -32,6 +32,10 @@ class GeneratorQueryScopesTest extends TestCase
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleParametersTypeHintedAllowsNull(?int $id, ?string $name)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleTypedParametersComplex(\romanzipp\ModelDoc\Tests\Support\ModelBasic $user, \romanzipp\ModelDoc\Tests\Support\ModelBasic $otherUser)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleTypedParametersComplexAllowsNull(?\romanzipp\ModelDoc\Tests\Support\ModelBasic $user, ?\romanzipp\ModelDoc\Tests\Support\ModelBasic $otherUser)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultInt(int $id = 69)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultFloat(float $id = 69.1)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultString(string $id = \'69\')',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultNull(?string $id = null)',
             ' */',
         ], $doc);
     }
@@ -62,6 +66,10 @@ class GeneratorQueryScopesTest extends TestCase
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleParametersTypeHintedAllowsNull(?int $id, ?string $name)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleTypedParametersComplex(\romanzipp\ModelDoc\Tests\Support\ModelBasic $user, \romanzipp\ModelDoc\Tests\Support\ModelBasic $otherUser)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleTypedParametersComplexAllowsNull(?\romanzipp\ModelDoc\Tests\Support\ModelBasic $user, ?\romanzipp\ModelDoc\Tests\Support\ModelBasic $otherUser)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultInt(int $id = 69)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultFloat(float $id = 69.1)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultString(string $id = \'69\')',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultNull(?string $id = null)',
             ' */',
         ], $doc);
     }
@@ -92,6 +100,10 @@ class GeneratorQueryScopesTest extends TestCase
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleParametersTypeHintedAllowsNull(?int $id, ?string $name)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleTypedParametersComplex(\romanzipp\ModelDoc\Tests\Support\ModelBasic $user, \romanzipp\ModelDoc\Tests\Support\ModelBasic $otherUser)',
             ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereMultipleTypedParametersComplexAllowsNull(?\romanzipp\ModelDoc\Tests\Support\ModelBasic $user, ?\romanzipp\ModelDoc\Tests\Support\ModelBasic $otherUser)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultInt(int $id = 69)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultFloat(float $id = 69.1)',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultString(string $id = \'69\')',
+            ' * @method static \Illuminate\Database\Eloquent\Builder|\romanzipp\ModelDoc\Tests\Support\ModelQueryScopes whereParameterDefaultNull(?string $id = null)',
             ' */',
         ], $doc);
     }

@@ -208,6 +208,26 @@ class DocumentationGenerator
             return false;
         };
 
+        $formatDefaultValue = function ($value) {
+            if (is_int($value)) {
+                return $value;
+            }
+
+            if (is_float($value)) {
+                return strval($value);
+            }
+
+            if (is_string($value)) {
+                return sprintf('\'%s\'', $value);
+            }
+
+            if (null === $value) {
+                return 'null';
+            }
+
+            return $value;
+        };
+
         foreach ($reflectionMethods as $reflectionMethod) {
             // $scopeName = "scopeWhereId"
             if (Str::startsWith($scopeName = $reflectionMethod->getName(), 'scope')) {
@@ -234,6 +254,10 @@ class DocumentationGenerator
                         $parameter .= ' ';
                     }
                     $parameter .= '$' . $reflectionParameter->getName();
+
+                    if ($reflectionParameter->isDefaultValueAvailable()) {
+                        $parameter .= ' = ' . $formatDefaultValue($reflectionParameter->getDefaultValue());
+                    }
 
                     $methodParameters[] = $parameter;
                 }
