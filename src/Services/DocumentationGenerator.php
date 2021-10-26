@@ -611,6 +611,10 @@ class DocumentationGenerator
             return 'null';
         }
 
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
         if (is_int($value)) {
             return $value;
         }
