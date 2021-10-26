@@ -605,6 +605,13 @@ class DocumentationGenerator
         return null;
     }
 
+    /**
+     * Get the string representation of any value for the default method parameter.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
     private static function getDefaultValue($value): string
     {
         if (null === $value) {
@@ -616,7 +623,7 @@ class DocumentationGenerator
         }
 
         if (is_int($value)) {
-            return $value;
+            return strval($value);
         }
 
         if (is_float($value)) {
