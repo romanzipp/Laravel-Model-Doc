@@ -453,12 +453,15 @@ class DocumentationGenerator
 
             $types = $this->getTypesForTableColumn($model, $tableColumn);
 
-            if ($model->hasCast($name) && ! empty($castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])])) {
-                if (in_array('null', $types)) {
-                    $castedTypes[] = 'null';
-                }
+            if ($model->hasCast($name)) {
+                $castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])];
+                if ( ! empty(array_filter($castedTypes))) {
+                    if (in_array('null', $types)) {
+                        $castedTypes[] = 'null';
+                    }
 
-                $types = $castedTypes;
+                    $types = $castedTypes;
+                }
             }
 
             if ( ! empty($types)) {
