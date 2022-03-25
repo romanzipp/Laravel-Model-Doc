@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Database\Eloquent\Relations;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionException;
@@ -511,7 +510,7 @@ class DocumentationGenerator
                 continue;
             }
 
-            $types[] = '\\' . Carbon::class;
+            $types[] = '\\' . now()::class;
         }
 
         if (empty($types)) {
@@ -602,7 +601,7 @@ class DocumentationGenerator
             case 'immutable_custom_datetime':
             case 'immutable_datetime':
             case 'timestamp':
-                return '\\' . \Carbon\Carbon::class;
+                return '\\' . now()::class;
         }
 
         return null;
