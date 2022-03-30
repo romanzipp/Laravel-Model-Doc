@@ -510,7 +510,7 @@ class DocumentationGenerator
                 continue;
             }
 
-            $types[] = '\\' . now()::class;
+            $types[] = '\\' . get_class(now());
         }
 
         if (empty($types)) {
@@ -601,7 +601,7 @@ class DocumentationGenerator
             case 'immutable_custom_datetime':
             case 'immutable_datetime':
             case 'timestamp':
-                return '\\' . now()::class;
+                return '\\' . get_class(now());
         }
 
         return null;
