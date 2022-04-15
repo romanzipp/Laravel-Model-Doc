@@ -40,6 +40,10 @@ class DocumentationGenerator
                 continue;
             }
 
+            if ($model->isIgnored()) {
+                continue;
+            }
+
             yield $model;
         }
     }

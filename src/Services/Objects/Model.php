@@ -107,6 +107,11 @@ final class Model
         return "{$this->guessNamespace()}\\{$fileName}";
     }
 
+    public function isIgnored(): bool
+    {
+        return in_array($this->reflectionClass->name, (array) (config('model-doc.ignore', [])));
+    }
+
     private function isClassLoaded(): bool
     {
         return class_exists(

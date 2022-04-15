@@ -40,4 +40,7 @@ return [
     ],
 
     'fail_when_empty' => false,
+
+    // Ignore models by FQCN
+    'ignore' => [],
 ];

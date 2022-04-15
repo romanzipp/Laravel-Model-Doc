@@ -4,6 +4,7 @@ namespace romanzipp\ModelDoc\Tests;
 
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Services\Objects\Model;
+use romanzipp\ModelDoc\Tests\Support\ModelNoTable;
 
 class ModelLoadingTest extends TestCase
 {
@@ -13,6 +14,19 @@ class ModelLoadingTest extends TestCase
             $this->getFile(__DIR__ . '/Support/ModelNoTable.php')
         );
 
+        self::assertFalse($model->isIgnored());
+        self::assertInstanceOf(Model::class, $model);
+    }
+
+    public function testModelIsIgnored()
+    {
+        config(['model-doc.ignore' => [ModelNoTable::class]]);
+
+        $model = new Model(
+            $this->getFile(__DIR__ . '/Support/ModelNoTable.php')
+        );
+
+        self::assertTrue($model->isIgnored());
         self::assertInstanceOf(Model::class, $model);
     }
 
