@@ -103,4 +103,25 @@ class GeneratorRelationsTest extends TestCase
             $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
     }
+
+    public function testCorrectPluralCounts()
+    {
+        config([
+            'model-doc.relations.enabled' => true,
+            'model-doc.relations.counts.enabled' => true,
+        ]);
+
+        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelPluralRelations.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesUp',
+            ' * @property int|null $votes_up_count',
+            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesDown',
+            ' * @property int|null $votes_down_count',
+            ' */',
+        ], $doc);
+    }
 }

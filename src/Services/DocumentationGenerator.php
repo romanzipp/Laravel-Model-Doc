@@ -341,8 +341,12 @@ class DocumentationGenerator
             return [$relationProperty];
         }
 
-        $countVariable = Str::snake($reflectionMethod->getName());
-        $countVariable = Str::plural($countVariable);
+        $countVariable = $reflectionMethod->getName();
+        $countVariable = Str::snake($countVariable);
+
+        if ( ! Str::endsWith($countVariable, ['_up', '_down'])) {
+            $countVariable = Str::plural($countVariable);
+        }
 
         $countProperty = new PropertyTag();
         $countProperty->setVariable("\${$countVariable}_count");
