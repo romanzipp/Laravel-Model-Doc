@@ -47,7 +47,7 @@ class DocumentationGenerator
         }
 
         $finder = new Finder();
-        $finder->files()->in($path);
+        $finder->files()->name('*.php')->in($path);
 
         foreach ($finder as $file) {
             try {
