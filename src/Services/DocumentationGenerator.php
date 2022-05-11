@@ -26,12 +26,28 @@ use Symfony\Component\Finder\Finder;
 class DocumentationGenerator
 {
     /**
+     * @var callable
+     */
+    public static $pathCallback;
+
+    public static function usePath(callable $pathCallback): void
+    {
+        self::$pathCallback = $pathCallback;
+    }
+
+    /**
      * @return \Generator<\romanzipp\ModelDoc\Services\Objects\Model>
      */
     public function collectModels(): Generator
     {
+        $path = base_path('app/');
+
+        if (isset(self::$pathCallback)) {
+            $path = (self::$pathCallback)();
+        }
+
         $finder = new Finder();
-        $finder->files()->in(base_path('app/'));
+        $finder->files()->in($path);
 
         foreach ($finder as $file) {
             try {

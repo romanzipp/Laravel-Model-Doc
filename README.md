@@ -109,6 +109,23 @@ class MyUser extends Model
 }
 ```
 
+### Set custom path
+
+You can set a custom base path for the generator using the `usePath` static method.
+
+```php
+use Illuminate\Support\ServiceProvider;
+use romanzipp\ModelDoc\Services\DocumentationGenerator;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        DocumentationGenerator::usePath(fn () => base_path('app/Models'));
+    }
+}
+```
+
 See the [configuration file](config/model-doc.php) for more specific use cases.
 
 ## Features
