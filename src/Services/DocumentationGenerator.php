@@ -26,9 +26,9 @@ use Symfony\Component\Finder\Finder;
 class DocumentationGenerator
 {
     /**
-     * @var callable
+     * @var callable|null
      */
-    public static $pathCallback;
+    public static $pathCallback = null;
 
     public static function usePath(callable $pathCallback): void
     {
