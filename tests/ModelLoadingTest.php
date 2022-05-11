@@ -11,7 +11,7 @@ class ModelLoadingTest extends TestCase
 {
     public function testGeneratorCustomPath()
     {
-        DocumentationGenerator::usePath(fn () => __DIR__ . '/Support/files');
+        DocumentationGenerator::usePath(fn () => __DIR__ . '/Support/Files');
 
         $generator = new DocumentationGenerator();
         $models = iterator_to_array($generator->collectModels());
