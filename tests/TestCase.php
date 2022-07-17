@@ -6,6 +6,7 @@ use gossi\docblock\Docblock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use romanzipp\ModelDoc\Utils\StringUtils;
 use Symfony\Component\Finder\SplFileInfo;
 
 class TestCase extends BaseTestCase
@@ -41,6 +42,7 @@ class TestCase extends BaseTestCase
             $table->string('column_string');
             $table->string('column_string_nullable')->nullable();
 
+
             $table->boolean('column_boolean');
             $table->boolean('column_boolean_nullable')->nullable();
         });
@@ -52,9 +54,11 @@ class TestCase extends BaseTestCase
 
     protected static function assertDocBlock(array $expected, Docblock $actual): void
     {
-        self::assertSame(implode(PHP_EOL, $expected), $actual->toString());
+        $eol = StringUtils::detectEOL($actual->toString());
 
-        $actualLines = explode(PHP_EOL, $actual->toString());
+        self::assertSame(implode($eol, $expected), $actual->toString());
+
+        $actualLines = explode($eol, $actual->toString());
 
         foreach ($expected as $index => $line) {
             self::assertSame($line, $actualLines[$index]);

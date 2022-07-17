@@ -21,6 +21,7 @@ use ReflectionNamedType;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\Objects\Model;
+use romanzipp\ModelDoc\Utils\StringUtils;
 use Symfony\Component\Finder\Finder;
 
 class DocumentationGenerator
@@ -385,7 +386,9 @@ class DocumentationGenerator
 
         $lineIndexClassDeclaration = null;
 
-        $lines = explode(PHP_EOL, $content);
+        $eol = StringUtils::detectEOL($content);
+
+        $lines = explode($eol, $content);
 
         foreach ($lines as $index => $line) {
             if ( ! preg_match('/^(abstract|final)? ?class ([A-z]+)/', $line)) {
@@ -414,7 +417,7 @@ class DocumentationGenerator
             $lines[$index] = null;
         }
 
-        $docLines = explode(PHP_EOL, $docblock->toString());
+        $docLines = explode($eol, $docblock->toString());
 
         foreach (array_reverse($docLines) as $docLine) {
             array_splice($lines, $lineIndexClassDeclaration, 0, $docLine);
@@ -422,7 +425,7 @@ class DocumentationGenerator
 
         $lines = array_filter($lines, static fn ($line) => null !== $line);
 
-        file_put_contents($reflectionClass->getFileName(), implode(PHP_EOL, $lines));
+        file_put_contents($reflectionClass->getFileName(), implode($eol, $lines));
     }
 
     /**
