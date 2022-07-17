@@ -47,6 +47,8 @@ class GeneratorAccessorsTest extends TestCase
             ' * @property int $column_integer',
             ' * @property int|null $column_integer_nullable',
             ' * @property string|null $column_string_nullable',
+            ' * @property datetime|string $column_datetime',
+            ' * @property datetime|string|null $column_datetime_nullable',
             ' * @property bool $column_boolean',
             ' * @property bool|null $column_boolean_nullable',
             ' * @property int $column_string',

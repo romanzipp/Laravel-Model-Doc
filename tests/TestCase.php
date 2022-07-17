@@ -42,6 +42,8 @@ class TestCase extends BaseTestCase
             $table->string('column_string');
             $table->string('column_string_nullable')->nullable();
 
+            $table->datetime('column_datetime');
+            $table->datetime('column_datetime_nullable')->nullable();
 
             $table->boolean('column_boolean');
             $table->boolean('column_boolean_nullable')->nullable();
