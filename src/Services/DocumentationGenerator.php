@@ -68,9 +68,9 @@ class DocumentationGenerator
     /**
      * @param \romanzipp\ModelDoc\Services\Objects\Model $model
      *
-     * @return \gossi\docblock\Docblock
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
+     * @return \gossi\docblock\Docblock
      */
     public function generateDocBlock(Model $model): Docblock
     {
@@ -80,7 +80,7 @@ class DocumentationGenerator
 
         // 1. Generate properties from database columns
 
-        if (true === config('model-doc.attributes.enabled') && !$reflectionClass->isAbstract()) {
+        if (true === config('model-doc.attributes.enabled') && ! $reflectionClass->isAbstract()) {
             try {
                 /** @var \Illuminate\Database\Eloquent\Model $instance */
                 $instance = $reflectionClass->newInstance();
@@ -129,7 +129,7 @@ class DocumentationGenerator
         $uniques = [];
 
         foreach ($tags as $index => $tag) {
-            if (!isset($uniques[$class = get_class($tag)])) {
+            if ( ! isset($uniques[$class = get_class($tag)])) {
                 $uniques[$class] = [];
             }
 
@@ -177,7 +177,7 @@ class DocumentationGenerator
         foreach ($reflectionClass->getMethods() as $method) {
             $matches = [];
 
-            if (!preg_match('/^get([A-z0-9_]+)Attribute$/', $method->getName(), $matches)) {
+            if ( ! preg_match('/^get([A-z0-9_]+)Attribute$/', $method->getName(), $matches)) {
                 continue;
             }
 
@@ -288,7 +288,7 @@ class DocumentationGenerator
         foreach ($reflectionMethods as $reflectionMethod) {
             $reflectionReturnType = $reflectionMethod->getReturnType();
 
-            if (!($reflectionReturnType instanceof ReflectionNamedType)) {
+            if ( ! ($reflectionReturnType instanceof ReflectionNamedType)) {
                 continue;
             }
 
@@ -302,7 +302,7 @@ class DocumentationGenerator
                 continue;
             }
 
-            if (!$returnReflection->isSubclassOf(Relations\Relation::class)) {
+            if ( ! $returnReflection->isSubclassOf(Relations\Relation::class)) {
                 continue;
             }
 
@@ -326,11 +326,11 @@ class DocumentationGenerator
         $isMany = false;
 
         foreach ([
-                     Relations\HasMany::class,
-                     Relations\HasManyThrough::class,
-                     Relations\MorphMany::class,
-                     Relations\BelongsToMany::class,
-                 ] as $relationClass) {
+            Relations\HasMany::class,
+            Relations\HasManyThrough::class,
+            Relations\MorphMany::class,
+            Relations\BelongsToMany::class,
+        ] as $relationClass) {
             $isMany = $isMany || $relation instanceof $relationClass;
         }
 
@@ -361,7 +361,7 @@ class DocumentationGenerator
         $countVariable = $reflectionMethod->getName();
         $countVariable = Str::snake($countVariable);
 
-        if (!Str::endsWith($countVariable, ['_up', '_down'])) {
+        if ( ! Str::endsWith($countVariable, ['_up', '_down'])) {
             $countVariable = Str::plural($countVariable);
         }
 
@@ -391,7 +391,7 @@ class DocumentationGenerator
         $lines = explode($eol, $content);
 
         foreach ($lines as $index => $line) {
-            if (!preg_match('/^(abstract|final)? ?class ([A-z]+)/', $line)) {
+            if ( ! preg_match('/^(abstract|final)? ?class ([A-z]+)/', $line)) {
                 continue;
             }
 
@@ -410,7 +410,7 @@ class DocumentationGenerator
                 break;
             }
 
-            if (!Str::startsWith($line, ['/**', ' *', ' */'])) {
+            if ( ! Str::startsWith($line, ['/**', ' *', ' */'])) {
                 continue;
             }
 
@@ -423,7 +423,7 @@ class DocumentationGenerator
             array_splice($lines, $lineIndexClassDeclaration, 0, $docLine);
         }
 
-        $lines = array_filter($lines, static fn($line) => null !== $line);
+        $lines = array_filter($lines, static fn ($line) => null !== $line);
 
         file_put_contents($reflectionClass->getFileName(), implode($eol, $lines));
     }
@@ -432,9 +432,9 @@ class DocumentationGenerator
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      * @param \Illuminate\Database\Eloquent\Model $model
      *
-     * @return \Generator<\gossi\docblock\tags\PropertyTag>
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
+     * @return \Generator<\gossi\docblock\tags\PropertyTag>
      */
     private function getModelAttributesProperties(ReflectionClass $reflectionClass, IlluminateModel $model): Generator
     {
@@ -481,7 +481,7 @@ class DocumentationGenerator
 
             if ($model->hasCast($name)) {
                 $castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])];
-                if (!empty(array_filter($castedTypes))) {
+                if ( ! empty(array_filter($castedTypes))) {
                     if (in_array('null', $types)) {
                         $castedTypes[] = 'null';
                     }
@@ -490,7 +490,7 @@ class DocumentationGenerator
                 }
             }
 
-            if (!empty($types)) {
+            if ( ! empty($types)) {
                 $property->setType(
                     implode('|', $types)
                 );
@@ -508,9 +508,9 @@ class DocumentationGenerator
      * @param \Illuminate\Database\Eloquent\Model $model
      * @param \Doctrine\DBAL\Schema\Column $column
      *
-     * @return array<string>
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
+     * @return array<string>
      */
     private function getTypesForTableColumn(IlluminateModel $model, Column $column): array
     {
@@ -549,12 +549,10 @@ class DocumentationGenerator
                 case Types\FloatType::class:
                     $types[] = 'float';
                     break;
-                case Types\DateTimeType::class:
-                    $types[] = 'datetime|string';
-                    break;
                 case Types\StringType::class:
                 case Types\TextType::class:
                 case Types\JsonType::class:
+                case Types\DateTimeType::class:
                     $types[] = 'string';
                     break;
                 case Types\BooleanType::class:
@@ -576,7 +574,7 @@ class DocumentationGenerator
     {
         $parameter = '';
 
-        if (!$reflectionType instanceof ReflectionNamedType) {
+        if ( ! $reflectionType instanceof ReflectionNamedType) {
             return null;
         }
 
@@ -594,11 +592,11 @@ class DocumentationGenerator
     }
 
     /**
+     * @internal
+     *
      * @param string $castType
      *
      * @return string
-     * @internal
-     *
      */
     public static function getReturnTypeForCast(string $castType): ?string
     {
