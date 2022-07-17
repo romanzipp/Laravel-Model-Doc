@@ -550,7 +550,7 @@ class DocumentationGenerator
                     $types[] = 'float';
                     break;
                 case Types\DateTimeType::class:
-                    $types[] = 'datetime|string';
+                    $types[] = '\DateTime|string';
                     break;
                 case Types\StringType::class:
                 case Types\TextType::class:
