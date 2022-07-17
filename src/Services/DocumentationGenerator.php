@@ -549,10 +549,12 @@ class DocumentationGenerator
                 case Types\FloatType::class:
                     $types[] = 'float';
                     break;
+                case Types\DateTimeType::class:
+                    $types[] = 'datetime|string';
+                    break;
                 case Types\StringType::class:
                 case Types\TextType::class:
                 case Types\JsonType::class:
-                case Types\DateTimeType::class:
                     $types[] = 'string';
                     break;
                 case Types\BooleanType::class:
