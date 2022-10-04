@@ -109,7 +109,7 @@ final class Model
 
     public function isIgnored(): bool
     {
-        return in_array($this->reflectionClass->name, (array) (config('model-doc.ignore', [])));
+        return in_array($this->reflectionClass->name, (array) config('model-doc.ignore', []));
     }
 
     private function isClassLoaded(): bool
