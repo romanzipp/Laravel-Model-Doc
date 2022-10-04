@@ -22,6 +22,7 @@ use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\Objects\Model;
 use Symfony\Component\Finder\Finder;
+use Throwable;
 
 class DocumentationGenerator
 {
@@ -104,11 +105,15 @@ class DocumentationGenerator
 
         if (isset($instance) && true === config('model-doc.relations.enabled')) {
             foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
-                /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
-                $relation = $instance->{$reflectionMethod->getName()}();
+                try {
+                    /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
+                    $relation = $instance->{$reflectionMethod->getName()}();
 
-                foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
-                    $tags[] = $property;
+                    foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
+                        $tags[] = $property;
+                    }
+                } catch (Throwable $exception) {
+                    continue; // thanks spatie :-)
                 }
             }
         }
