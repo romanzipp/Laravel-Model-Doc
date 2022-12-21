@@ -402,7 +402,7 @@ class DocumentationGenerator
         }
 
         if (null === $lineIndexClassDeclaration) {
-            throw new ModelDocumentationFailedException('Cant find class declaration');
+            throw new ModelDocumentationFailedException('Can not find class declaration');
         }
 
         // Remove existing phpdoc
@@ -466,7 +466,7 @@ class DocumentationGenerator
         try {
             $tableColumns = $schemaManager->listTableColumns($model->getTable());
         } catch (DoctrineException $exception) {
-            throw new ModelDocumentationFailedException('failed', 0, $exception);
+            throw new ModelDocumentationFailedException("Can not list table columns for table {$model->getTable()}", 0, $exception);
         }
 
         foreach ($tableColumns as $tableColumn) {
@@ -527,7 +527,7 @@ class DocumentationGenerator
                 try {
                     $class = new ReflectionClass($state->first());
                 } catch (ReflectionException $exception) {
-                    throw new ModelDocumentationFailedException('Failed get type for database column', 0, $exception);
+                    throw new ModelDocumentationFailedException("Failed get type for database column {$column->getName()} on table {$model->getTable()}", 0, $exception);
                 }
 
                 $types[] = '\\' . $class->getParentClass()->getName();
