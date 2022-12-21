@@ -5,7 +5,6 @@ namespace romanzipp\ModelDoc\Services;
 use Doctrine\DBAL\Exception as DoctrineException;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types;
-use Generator;
 use gossi\docblock\Docblock;
 use gossi\docblock\tags\MethodTag;
 use gossi\docblock\tags\PropertyTag;
@@ -14,15 +13,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Str;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionNamedType;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\Objects\Model;
 use Symfony\Component\Finder\Finder;
-use Throwable;
 
 class DocumentationGenerator
 {
@@ -39,7 +33,7 @@ class DocumentationGenerator
     /**
      * @return \Generator<\romanzipp\ModelDoc\Services\Objects\Model>
      */
-    public function collectModels(): Generator
+    public function collectModels(): \Generator
     {
         $path = base_path('app/');
 
@@ -84,7 +78,7 @@ class DocumentationGenerator
             try {
                 /** @var \Illuminate\Database\Eloquent\Model $instance */
                 $instance = $reflectionClass->newInstance();
-            } catch (ReflectionException $exception) {
+            } catch (\ReflectionException $exception) {
                 throw new ModelDocumentationFailedException('Can not create model instance', 0, $exception);
             }
 
@@ -112,7 +106,7 @@ class DocumentationGenerator
                     foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
                         $tags[] = $property;
                     }
-                } catch (Throwable $exception) {
+                } catch (\Throwable $exception) {
                     continue; // thanks spatie :-)
                 }
             }
@@ -176,7 +170,7 @@ class DocumentationGenerator
      *
      * @return \Generator<\gossi\docblock\tags\PropertyTag>
      */
-    public function getModelAccessors(ReflectionClass $reflectionClass): Generator
+    public function getModelAccessors(\ReflectionClass $reflectionClass): \Generator
     {
         foreach ($reflectionClass->getMethods() as $method) {
             $matches = [];
@@ -205,9 +199,9 @@ class DocumentationGenerator
      *
      * @return \Generator<\gossi\docblock\tags\MethodTag>
      */
-    private function getQueryScopeMethods(ReflectionClass $reflectionClass): Generator
+    private function getQueryScopeMethods(\ReflectionClass $reflectionClass): \Generator
     {
-        $reflectionMethods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+        $reflectionMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
         $scopeReturns = [
             '\\' . Builder::class,
@@ -283,16 +277,16 @@ class DocumentationGenerator
      *
      * @return \ReflectionMethod[]
      */
-    private function getModelRelationMethods(ReflectionClass $reflectionClass): array
+    private function getModelRelationMethods(\ReflectionClass $reflectionClass): array
     {
-        $reflectionMethods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+        $reflectionMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
         $methods = [];
 
         foreach ($reflectionMethods as $reflectionMethod) {
             $reflectionReturnType = $reflectionMethod->getReturnType();
 
-            if ( ! ($reflectionReturnType instanceof ReflectionNamedType)) {
+            if ( ! ($reflectionReturnType instanceof \ReflectionNamedType)) {
                 continue;
             }
 
@@ -301,8 +295,8 @@ class DocumentationGenerator
             }
 
             try {
-                $returnReflection = new ReflectionClass($reflectionReturnType->getName());
-            } catch (ReflectionException $exception) {
+                $returnReflection = new \ReflectionClass($reflectionReturnType->getName());
+            } catch (\ReflectionException $exception) {
                 continue;
             }
 
@@ -322,7 +316,7 @@ class DocumentationGenerator
      *
      * @return \gossi\docblock\tags\PropertyTag[]
      */
-    private function getPropertiesForRelation(ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
+    private function getPropertiesForRelation(\ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
     {
         $related = $relation->getRelated();
         $relatedClass = get_class($related);
@@ -438,7 +432,7 @@ class DocumentationGenerator
      *
      * @return \Generator<\gossi\docblock\tags\PropertyTag>
      */
-    private function getModelAttributesProperties(ReflectionClass $reflectionClass, IlluminateModel $model): Generator
+    private function getModelAttributesProperties(\ReflectionClass $reflectionClass, IlluminateModel $model): \Generator
     {
         /**
          * @var \gossi\docblock\tags\PropertyTag[] $accessors
@@ -525,8 +519,8 @@ class DocumentationGenerator
                 }
 
                 try {
-                    $class = new ReflectionClass($state->first());
-                } catch (ReflectionException $exception) {
+                    $class = new \ReflectionClass($state->first());
+                } catch (\ReflectionException $exception) {
                     throw new ModelDocumentationFailedException("Failed get type for database column {$column->getName()} on table {$model->getTable()}", 0, $exception);
                 }
 
@@ -576,7 +570,7 @@ class DocumentationGenerator
     {
         $parameter = '';
 
-        if ( ! $reflectionType instanceof ReflectionNamedType) {
+        if ( ! $reflectionType instanceof \ReflectionNamedType) {
             return null;
         }
 
