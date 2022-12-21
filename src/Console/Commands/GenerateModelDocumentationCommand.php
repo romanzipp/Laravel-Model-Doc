@@ -8,7 +8,7 @@ use romanzipp\ModelDoc\Services\DocumentationGenerator;
 
 class GenerateModelDocumentationCommand extends Command
 {
-    protected $signature = 'model-doc:generate';
+    protected $signature = 'model-doc:generate {-v}';
 
     public function handle(DocumentationGenerator $generator): void
     {
@@ -20,7 +20,11 @@ class GenerateModelDocumentationCommand extends Command
 
                 $this->info("Wrote {$model->getName()}");
             } catch (ModelDocumentationFailedException $exception) {
-                $this->warn("Failed {$model->getName()}");
+                $this->warn("Failed {$model->getName()}: {$exception->getMessage()}");
+
+                if ($this->option('v')) {
+                    $this->warn($exception);
+                }
             }
         }
     }
