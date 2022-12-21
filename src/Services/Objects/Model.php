@@ -3,8 +3,6 @@
 namespace romanzipp\ModelDoc\Services\Objects;
 
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
-use ReflectionClass;
-use ReflectionException;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -15,7 +13,7 @@ final class Model
     /**
      * @var \ReflectionClass<IlluminateModel>|null
      */
-    private ?ReflectionClass $reflectionClass = null;
+    private ?\ReflectionClass $reflectionClass = null;
 
     private ?IlluminateModel $modelInstance = null;
 
@@ -45,8 +43,8 @@ final class Model
         $qualifiedClassName = $this->getQualifiedClassName();
 
         try {
-            $this->reflectionClass = new ReflectionClass($qualifiedClassName);
-        } catch (ReflectionException $exception) {
+            $this->reflectionClass = new \ReflectionClass($qualifiedClassName);
+        } catch (\ReflectionException $exception) {
             throw new InvalidModelException('Could not create reflection class');
         }
 
@@ -85,7 +83,7 @@ final class Model
     /**
      * @return \ReflectionClass<IlluminateModel>
      */
-    public function getReflectionClass(): ReflectionClass
+    public function getReflectionClass(): \ReflectionClass
     {
         return $this->reflectionClass;
     }

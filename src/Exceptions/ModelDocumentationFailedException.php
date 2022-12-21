@@ -2,8 +2,6 @@
 
 namespace romanzipp\ModelDoc\Exceptions;
 
-use Exception;
-
-class ModelDocumentationFailedException extends Exception
+class ModelDocumentationFailedException extends \Exception
 {
 }
