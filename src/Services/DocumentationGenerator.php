@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\Objects\Model;
+use romanzipp\ModelDoc\Services\Tags\MixinTag;
 use Symfony\Component\Finder\Finder;
 
 class DocumentationGenerator
@@ -71,6 +72,12 @@ class DocumentationGenerator
         $tags = [];
 
         $reflectionClass = $model->getReflectionClass();
+
+        if (($mixinClasses = config('model-doc.custom_tags.mixins')) && ! empty($mixinClasses)) {
+            foreach ($mixinClasses as $mixinClass) {
+                $tags[] = new MixinTag($mixinClass);
+            }
+        }
 
         // 1. Generate properties from database columns
 

@@ -43,4 +43,11 @@ return [
 
     // Ignore models by FQCN
     'ignore' => [],
+
+    'custom_tags' => [
+        // Add a "@mixin" tag value to support static method linting for IDEs.
+        'mixins' => [
+            // \Illuminate\Database\Eloquent\Model::class,
+        ],
+    ],
 ];
