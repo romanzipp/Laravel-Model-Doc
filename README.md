@@ -175,6 +175,17 @@ Here is an example for `enum` type mapping in `database.php` config file:
 
 ## Testing
 
+### SQLite
+
 ```
 ./vendor/bin/phpunit
+```
+
+### MariaDB
+
+Requires [Lando](https://lando.dev/).
+
+```
+lando start
+lando phpunit
 ```

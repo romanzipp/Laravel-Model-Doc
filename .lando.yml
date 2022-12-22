@@ -1,0 +1,21 @@
+name: laravel-model-phpdoc
+recipe: lemp
+config:
+  php: "8.1"
+  composer_version: 2
+services:
+  appserver:
+    overrides:
+      environment:
+        DB_CONNECTION: mysql
+        DB_HOST: database
+        DB_DATABASE: lemp
+        DB_USERNAME: lemp
+        DB_PASSWORD: lemp
+tooling:
+  phpcs:
+    service: appserver
+    cmd: /app/vendor/bin/php-cs-fixer
+  phpunit:
+    service: appserver
+    cmd: /app/vendor/bin/phpunit
