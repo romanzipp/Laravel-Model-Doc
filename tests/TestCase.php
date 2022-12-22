@@ -48,6 +48,10 @@ class TestCase extends BaseTestCase
         $app['db']->connection()->getSchemaBuilder()->create('table_special', function (Blueprint $table) {
             $table->enum('column_enum', ['one', 'two']);
         });
+
+        $app['db']->connection()->getSchemaBuilder()->create('table_empty', function (Blueprint $table) {
+            $table->increments('id');
+        });
     }
 
     protected static function assertDocBlock(array $expected, Docblock $actual): void
