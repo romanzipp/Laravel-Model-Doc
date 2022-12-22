@@ -8,7 +8,7 @@ use romanzipp\ModelDoc\Services\DocumentationGenerator;
 
 class GenerateModelDocumentationCommand extends Command
 {
-    protected $signature = 'model-doc:generate {-v}';
+    protected $signature = 'model-doc:generate {--v}';
 
     public function handle(DocumentationGenerator $generator): void
     {
