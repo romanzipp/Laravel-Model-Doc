@@ -34,6 +34,8 @@ class TestCase extends BaseTestCase
 
     protected function setupDatabase(Application $app): void
     {
+        $app['db']->connection()->getSchemaBuilder()->dropAllTables();
+
         $app['db']->connection()->getSchemaBuilder()->create('table_one', function (Blueprint $table) {
             $table->integer('column_integer');
             $table->integer('column_integer_nullable')->nullable();
