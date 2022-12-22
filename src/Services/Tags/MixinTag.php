@@ -25,7 +25,7 @@ class MixinTag extends AbstractDescriptionTag
         return trim(sprintf('@mixin %s', trim($this->description)));
     }
 
-    public function getVariable()
+    public function getVariable(): ?string
     {
         return null;
     }
