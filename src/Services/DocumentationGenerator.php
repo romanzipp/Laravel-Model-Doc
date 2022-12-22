@@ -503,7 +503,7 @@ class DocumentationGenerator
         $schemaManager = $connection->getDoctrineSchemaManager();
 
         // Fix: "Doctrine\DBAL\Exception: Unknown database type enum requested, Doctrine\DBAL\Platforms\MariaDb1027Platform may not support it."
-        $schemaManager->getDatabasePlatform()->registerDoctrineTypeMapping('enum', Types\Types::STRING);
+        $schemaManager->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
         try {
             $tableColumns = $schemaManager->listTableColumns($model->getTable());
