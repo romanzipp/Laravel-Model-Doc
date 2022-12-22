@@ -73,7 +73,7 @@ class DocumentationGenerator
 
         $reflectionClass = $model->getReflectionClass();
 
-        if (($mixinClasses = config('model-doc.custom_tags.mixins')) && ! empty($mixinClasses)) {
+        if ($mixinClasses = config('model-doc.custom_tags.mixins')) {
             foreach ($mixinClasses as $mixinClass) {
                 $tags[] = new MixinTag($mixinClass);
             }
