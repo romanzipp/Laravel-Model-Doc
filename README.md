@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/romanzipp/Laravel-Model-Doc.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-model-doc)
 [![Total Downloads](https://img.shields.io/packagist/dt/romanzipp/Laravel-Model-Doc.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-model-doc)
 [![License](https://img.shields.io/packagist/l/romanzipp/Laravel-Model-Doc.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-model-doc)
-[![GitHub Build Status](https://img.shields.io/github/workflow/status/romanzipp/Laravel-Model-Doc/Tests?style=flat-square)](https://github.com/romanzipp/Laravel-Model-Doc/actions)
+[![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/romanzipp/Laravel-Model-Doc/tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/romanzipp/Laravel-Model-Doc/actions)
 
 Generate PHPDoc comments for Laravel Models including [**database columns**](https://laravel.com/docs/8.x/eloquent), [**relationships**](https://laravel.com/docs/8.x/eloquent-relationships), [**accessors**](https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators) and [**query scopes**](https://laravel.com/docs/8.x/eloquent#query-scopes).
 
