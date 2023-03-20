@@ -520,6 +520,7 @@ class DocumentationGenerator
         $types = [];
 
         if (method_exists($model, 'getStates')) {
+            /** @phpstan-ignore-next-line */
             foreach ($model::getStates() as $stateAttribute => $state) {
                 if ($column->getName() !== $stateAttribute) {
                     continue;
