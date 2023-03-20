@@ -128,6 +128,29 @@ class AppServiceProvider extends ServiceProvider
 
 See the [configuration file](config/model-doc.php) for more specific use cases.
 
+### Use verbose mode
+
+If you get an error when generating the documentation for a model, you can use the `--v` option to get more information about the error.
+
+```
+php artisan model-doc:generate --v
+```
+
+### Custom database types
+
+If (in verbose mode) you get an error like `Unknown database type enum requested`, you can add that custom type mapping in Laravel's `database.php` config file. Laravel uses the [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html) package for database types. You can find a list of supported types [here](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html#mapping-matrix).
+Laravel provides an example for `timestamp` type mapping [here](https://laravel.com/docs/10.x/migrations#modifying-columns-on-sqlite).
+
+Here is an example for `enum` type mapping in `database.php` config file:
+
+```php
+'dbal' => [
+    'types' => [
+        'enum' => Doctrine\DBAL\Types\StringType::class,
+    ],
+],
+```
+
 ## Features
 
 - [x] Generate `@property` tags from attributes
