@@ -339,6 +339,10 @@ class DocumentationGenerator
             $isMany = $isMany || $relation instanceof $relationClass;
         }
 
+        if ($relation instanceof Relations\HasOneThrough) {
+            $isMany = false;
+        }
+
         if ($relation instanceof Relations\MorphTo) {
             $relatedClass = config('model-doc.relations.base_model') ?? IlluminateModel::class;
         }

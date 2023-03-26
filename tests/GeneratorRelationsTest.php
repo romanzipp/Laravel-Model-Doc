@@ -31,7 +31,7 @@ class GeneratorRelationsTest extends TestCase
             ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
             ' * @property int|null $has_one_relations_count',
             // HasOneThrough
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasOneThroughRelation',
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneThroughRelation',
             ' * @property int|null $has_one_through_relations_count',
             // HasMany
             ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
@@ -63,7 +63,7 @@ class GeneratorRelationsTest extends TestCase
             // HasOne
             ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
             // HasOneThrough
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasOneThroughRelation',
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneThroughRelation',
             // HasMany
             ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
             // HasManyThrough
