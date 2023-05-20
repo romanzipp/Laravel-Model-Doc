@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Str;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
+use romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass;
+use romanzipp\ModelDoc\Services\Objects\Factory;
 use romanzipp\ModelDoc\Services\Objects\Model;
 use romanzipp\ModelDoc\Services\Tags\MixinTag;
 use Symfony\Component\Finder\Finder;
@@ -67,13 +69,21 @@ class DocumentationGenerator
      */
     public function generate(Model $model): void
     {
-        $doc = $this->generateModelDocBlock($model);
-
-        if ($doc->isEmpty()) {
-            return;
+        $modelDoc = $this->generateModelDocBlock($model);
+        if ( ! $modelDoc->isEmpty()) {
+            $this->writeDoc($model, $modelDoc);
         }
 
-        $this->writeDoc($model, $doc);
+        if ($factory = $model->getFactory()) {
+            $factoryDoc = $this->generateFactoryDocBlock($factory);
+            if ( ! $factoryDoc->isEmpty()) {
+                $this->writeDoc($factory, $factoryDoc);
+            }
+        }
+    }
+
+    public function generateFactoryDocBlock(Factory $model): ?Docblock
+    {
     }
 
     /**
@@ -384,12 +394,12 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     * @param \romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass $model
      * @param \gossi\docblock\Docblock $docblock
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      */
-    private function writeDoc(Model $model, Docblock $docblock): void
+    private function writeDoc(AbstractDocumentableClass $model, Docblock $docblock): void
     {
         $reflectionClass = $model->getReflectionClass();
 

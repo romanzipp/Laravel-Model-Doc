@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class Model extends AbstractDocumentableClass implements DocumentableClass
+final class Model extends AbstractDocumentableClass
 {
     private ?IlluminateModel $modelInstance = null;
 
@@ -26,5 +26,10 @@ final class Model extends AbstractDocumentableClass implements DocumentableClass
     public function getInstance(): ?IlluminateModel
     {
         return $this->modelInstance;
+    }
+
+    public function getFactory(): ?Factory
+    {
+        return Factory::fromModel($this);
     }
 }
