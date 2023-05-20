@@ -74,7 +74,7 @@ class DocumentationGenerator
             $this->writeDoc($model, $modelDoc);
         }
 
-        if ($factory = $model->getFactory()) {
+        if (config('model-doc.factories.factories') && $factory = $model->getFactory()) {
             $factoryDoc = $this->generateFactoryDocBlock($factory);
             if ( ! $factoryDoc->isEmpty()) {
                 $this->writeDoc($factory, $factoryDoc);
@@ -166,6 +166,12 @@ class DocumentationGenerator
 
         // 5. Generate "factory" method
 
+        if (true === config('model-doc.factories.enabled')) {
+            foreach ($this->getModelFactoryMethods($model) as $property) {
+                $tags[] = $property;
+            }
+        }
+
         // Generate final Docblock
 
         if (true === config('model-doc.fail_when_empty') && empty($tags)) {
@@ -195,6 +201,27 @@ class DocumentationGenerator
         }
 
         return $doc;
+    }
+
+    /**
+     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     *
+     * @return array|\gossi\docblock\tags\MethodTag[]
+     */
+    public function getModelFactoryMethods(Model $model): array
+    {
+        $factory = $model->getFactory();
+        if (null === $factory) {
+            return [];
+        }
+
+        $tag = new MethodTag();
+        $tag->setType('static \\' . $factory->getQualifiedClassName() . '<self>');
+        $tag->setDescription('factory($count = null, $state = [])');
+
+        return [
+            $tag,
+        ];
     }
 
     /**
