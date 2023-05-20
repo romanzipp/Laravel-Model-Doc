@@ -33,7 +33,11 @@ final class Factory extends AbstractDocumentableClass
             return null;
         }
 
-        /** @var \Illuminate\Database\Eloquent\Factories\Factory $illuminateFactory */
+        /**
+         * @var \Illuminate\Database\Eloquent\Factories\Factory<\Illuminate\Database\Eloquent\Model> $illuminateFactory
+         *
+         * @phpstan-ignore-next-line
+         */
         $illuminateFactory = $model->getInstance()::factory();
 
         $refClass = new \ReflectionClass($illuminateFactory);
