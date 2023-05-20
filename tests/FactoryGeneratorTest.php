@@ -6,7 +6,7 @@ use romanzipp\ModelDoc\Services\DocumentationGenerator;
 use romanzipp\ModelDoc\Services\Objects\Factory;
 use romanzipp\ModelDoc\Services\Objects\Model;
 
-class FactoryTest extends TestCase
+class FactoryGeneratorTest extends TestCase
 {
     public function testNoFactoryForModel()
     {

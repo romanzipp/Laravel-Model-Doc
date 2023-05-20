@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 use romanzipp\ModelDoc\Tests\Support\Files\Model;
 
-class GeneratorCustomTagsTest extends TestCase
+class ModelGeneratorCustomTagsTest extends TestCase
 {
     public function testEmptyMixin()
     {

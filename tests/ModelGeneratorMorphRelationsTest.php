@@ -5,7 +5,7 @@ namespace romanzipp\ModelDoc\Tests;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 use romanzipp\ModelDoc\Services\Objects\Model;
 
-class GeneratorMorphRelationsTest extends TestCase
+class ModelGeneratorMorphRelationsTest extends TestCase
 {
     public function testMorphRelations()
     {
