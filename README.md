@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/packagist/l/romanzipp/Laravel-Model-Doc.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-model-doc)
 [![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/romanzipp/Laravel-Model-Doc/tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/romanzipp/Laravel-Model-Doc/actions)
 
-Generate PHPDoc comments for Laravel Models including [**database columns**](https://laravel.com/docs/8.x/eloquent), [**relationships**](https://laravel.com/docs/8.x/eloquent-relationships), [**accessors**](https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators) and [**query scopes**](https://laravel.com/docs/8.x/eloquent#query-scopes).
+Generate PHPDoc comments for Laravel Models including [**database columns**](https://laravel.com/docs/eloquent), [**relationships**](https://laravel.com/docs/eloquent-relationships), [**accessors**](https://laravel.com/docs/eloquent-mutators#accessors-and-mutators), [**query scopes**](https://laravel.com/docs/eloquent#query-scopes) and [**factories**](https://laravel.com/docs/eloquent-factories).
 
 ## Contents
 
@@ -66,6 +66,7 @@ class MyModel extends Model
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -83,9 +84,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $teams_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder whereTeamName(string $name)
+ * 
+ * @method static \Database\Factoies\MyUserFactory<self> factory($count = null, $state = [])
  */
 class MyUser extends Model
 {
+    use HasFactory;
+
     protected $table = 'users';
 
     protected $casts = [
@@ -105,6 +110,11 @@ class MyUser extends Model
     public function getPrettyTitleAttribute(): string
     {
         return ucfirst($this->title);
+    }
+    
+    protected static function newFactory()
+    {
+        return new \Database\Factoies\MyUserFactory();
     }
 }
 ```
