@@ -29,7 +29,12 @@ final class Factory extends AbstractDocumentableClass
 
     public static function fromModel(Model $model): ?self
     {
-        if ( ! method_exists($model->getInstance(), 'factory')) {
+        $instance = $model->getInstance();
+        if (null === $instance) {
+            return null;
+        }
+
+        if ( ! method_exists($instance, 'factory')) {
             return null;
         }
 
@@ -38,7 +43,7 @@ final class Factory extends AbstractDocumentableClass
          *
          * @phpstan-ignore-next-line
          */
-        $illuminateFactory = $model->getInstance()::factory();
+        $illuminateFactory = $instance::factory();
 
         $refClass = new \ReflectionClass($illuminateFactory);
 
