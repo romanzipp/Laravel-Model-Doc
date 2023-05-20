@@ -6,7 +6,7 @@ use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 use romanzipp\ModelDoc\Services\Objects\Model;
 
-class GeneratorRelationsTest extends TestCase
+class ModelGeneratorRelationsTest extends TestCase
 {
     public function testRelations()
     {

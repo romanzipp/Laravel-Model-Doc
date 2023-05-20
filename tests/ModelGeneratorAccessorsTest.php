@@ -5,7 +5,7 @@ namespace romanzipp\ModelDoc\Tests;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 use romanzipp\ModelDoc\Services\Objects\Model;
 
-class GeneratorAccessorsTest extends TestCase
+class ModelGeneratorAccessorsTest extends TestCase
 {
     public function testGeneratesAccessorProperties()
     {

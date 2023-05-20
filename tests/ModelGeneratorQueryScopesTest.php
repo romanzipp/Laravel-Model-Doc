@@ -5,7 +5,7 @@ namespace romanzipp\ModelDoc\Tests;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
 use romanzipp\ModelDoc\Services\Objects\Model;
 
-class GeneratorQueryScopesTest extends TestCase
+class ModelGeneratorQueryScopesTest extends TestCase
 {
     public function testScopes()
     {
