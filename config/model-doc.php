@@ -43,8 +43,6 @@ return [
     'factories' => [
         // Add Model::factory() method type hint to Model class
         'enabled' => true,
-        // Add forwarded create()/make() method type hints to factory classes
-        'factories' => true,
     ],
 
     'fail_when_empty' => false,
