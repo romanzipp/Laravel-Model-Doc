@@ -5,14 +5,14 @@ namespace romanzipp\ModelDoc\Services;
 use Doctrine\DBAL\Exception as DoctrineException;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types;
-use gossi\docblock\Docblock;
-use gossi\docblock\tags\MethodTag;
-use gossi\docblock\tags\PropertyTag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Str;
+use phpowermove\docblock\Docblock;
+use phpowermove\docblock\tags\MethodTag;
+use phpowermove\docblock\tags\PropertyTag;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass;
@@ -79,7 +79,7 @@ class DocumentationGenerator
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
-     * @return \gossi\docblock\Docblock
+     * @return \phpowermove\docblock\Docblock
      */
     public function generateModelDocBlock(Model $model): Docblock
     {
@@ -183,7 +183,7 @@ class DocumentationGenerator
     /**
      * @param \romanzipp\ModelDoc\Services\Objects\Model $model
      *
-     * @return array|\gossi\docblock\tags\MethodTag[]
+     * @return array|\phpowermove\docblock\tags\MethodTag[]
      */
     public function getModelFactoryMethods(Model $model): array
     {
@@ -204,7 +204,7 @@ class DocumentationGenerator
     /**
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      *
-     * @return \Generator<\gossi\docblock\tags\PropertyTag>
+     * @return \Generator<\phpowermove\docblock\tags\PropertyTag>
      */
     public function getModelAccessors(\ReflectionClass $reflectionClass): \Generator
     {
@@ -233,7 +233,7 @@ class DocumentationGenerator
     /**
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
      *
-     * @return \Generator<\gossi\docblock\tags\MethodTag>
+     * @return \Generator<\phpowermove\docblock\tags\MethodTag>
      */
     private function getQueryScopeMethods(\ReflectionClass $reflectionClass): \Generator
     {
@@ -350,7 +350,7 @@ class DocumentationGenerator
      * @param \ReflectionMethod $reflectionMethod
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relation
      *
-     * @return \gossi\docblock\tags\PropertyTag[]
+     * @return \phpowermove\docblock\tags\PropertyTag[]
      */
     private function getPropertiesForRelation(\ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
     {
@@ -412,7 +412,7 @@ class DocumentationGenerator
 
     /**
      * @param \romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass $model
-     * @param \gossi\docblock\Docblock $docblock
+     * @param \phpowermove\docblock\Docblock $docblock
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      */
@@ -470,12 +470,12 @@ class DocumentationGenerator
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
-     * @return \Generator<\gossi\docblock\tags\PropertyTag>
+     * @return \Generator<\phpowermove\docblock\tags\PropertyTag>
      */
     private function getModelAttributesProperties(\ReflectionClass $reflectionClass, IlluminateModel $model): \Generator
     {
         /**
-         * @var \gossi\docblock\tags\PropertyTag[] $accessors
+         * @var \phpowermove\docblock\tags\PropertyTag[] $accessors
          */
         $accessors = [];
 
