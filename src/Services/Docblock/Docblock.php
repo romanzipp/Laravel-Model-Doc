@@ -48,4 +48,25 @@ class Docblock extends OriginalDocblock
 
         return $sorted;
     }
+
+    protected function writeLines(array $lines, bool $newline = false): string
+    {
+        $docblock = '';
+        if ($newline) {
+            $docblock .= " *\n";
+        }
+
+        foreach ($lines as $line) {
+            if (str_contains($line, "\n")) {
+                $sublines = explode("\n", $line);
+                $line = array_shift($sublines);
+                $docblock .= rtrim(" * $line") . "\n";
+                $docblock .= $this->writeLines($sublines);
+            } else {
+                $docblock .= rtrim(" * $line") . "\n";
+            }
+        }
+
+        return $docblock;
+    }
 }

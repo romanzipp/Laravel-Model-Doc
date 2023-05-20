@@ -40,7 +40,7 @@ class ModelGeneratorCustomTagsTest extends TestCase
         self::assertDocBlock([
             '/**',
             ' * @mixin \Illuminate\Database\Eloquent\Model',
-            ' * ',
+            ' *',
             ' * @property int $id',
             ' */',
         ], $doc);
@@ -63,7 +63,7 @@ class ModelGeneratorCustomTagsTest extends TestCase
             '/**',
             ' * @mixin \Illuminate\Database\Eloquent\Model',
             ' * @mixin \romanzipp\ModelDoc\Tests\Support\Files\Model',
-            ' * ',
+            ' *',
             ' * @property int $id',
             ' */',
         ], $doc);

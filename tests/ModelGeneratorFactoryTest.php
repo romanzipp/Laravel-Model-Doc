@@ -67,7 +67,7 @@ class ModelGeneratorFactoryTest extends TestCase
             ' * @property string|null $column_string_nullable',
             ' * @property bool $column_boolean',
             ' * @property bool|null $column_boolean_nullable',
-            ' * ',
+            ' *',
             ' * @method static \romanzipp\ModelDoc\Tests\Support\Factories\BasicFactory<self> factory($count = null, $state = [])',
             ' */',
         ], $doc);
