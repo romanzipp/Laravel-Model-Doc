@@ -495,6 +495,11 @@ class DocumentationGenerator
 
         $connection = $model->getConnection();
 
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager
+         */
         $schemaManager = $connection->getDoctrineSchemaManager();
 
         try {
@@ -515,7 +520,9 @@ class DocumentationGenerator
 
             $types = $this->getTypesForTableColumn($model, $tableColumn);
 
+            /** @phpstan-ignore-next-line */
             if ($model->hasCast($name)) {
+                /** @phpstan-ignore-next-line */
                 $castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])];
                 if ( ! empty(array_filter($castedTypes))) {
                     if (in_array('null', $types)) {
@@ -569,6 +576,7 @@ class DocumentationGenerator
             }
         }
 
+        /** @phpstan-ignore-next-line */
         foreach ($model->getDates() as $date) {
             if ($column->getName() !== $date) {
                 continue;
@@ -657,6 +665,7 @@ class DocumentationGenerator
             case 'json':
                 return 'array';
             case 'collection':
+                /** @phpstan-ignore-next-line */
                 return '\\' . \Illuminate\Support\Collection::class;
             case 'date':
             case 'datetime':
