@@ -45,4 +45,31 @@ class ModelGeneratorFactoryTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testFactoryMethodAddsEmptyLineBefore()
+    {
+        config([
+            'model-doc.attributes.enabled' => true,
+            'model-doc.relations.enabled' => false,
+            'model-doc.relations.counts.enabled' => false,
+            'model-doc.factories.enabled' => true,
+        ]);
+
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelFactoryBasic.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property int $column_integer',
+            ' * @property int|null $column_integer_nullable',
+            ' * @property string $column_string',
+            ' * @property string|null $column_string_nullable',
+            ' * @property bool $column_boolean',
+            ' * @property bool|null $column_boolean_nullable',
+            ' * ',
+            ' * @method static \romanzipp\ModelDoc\Tests\Support\Factories\BasicFactory<self> factory($count = null, $state = [])',
+            ' */',
+        ], $doc);
+    }
 }

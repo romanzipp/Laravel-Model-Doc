@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Str;
-use phpowermove\docblock\Docblock;
 use phpowermove\docblock\tags\MethodTag;
 use phpowermove\docblock\tags\PropertyTag;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
+use romanzipp\ModelDoc\Services\Docblock\Docblock;
 use romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass;
 use romanzipp\ModelDoc\Services\Objects\Model;
 use romanzipp\ModelDoc\Services\Tags\MixinTag;
@@ -79,7 +79,7 @@ class DocumentationGenerator
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
-     * @return \phpowermove\docblock\Docblock
+     * @return \romanzipp\ModelDoc\Services\Docblock\Docblock
      */
     public function generateModelDocBlock(Model $model): Docblock
     {
@@ -412,7 +412,7 @@ class DocumentationGenerator
 
     /**
      * @param \romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass $model
-     * @param \phpowermove\docblock\Docblock $docblock
+     * @param \romanzipp\ModelDoc\Services\Docblock\Docblock $docblock
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      */
