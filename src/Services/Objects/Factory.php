@@ -9,13 +9,22 @@ use Symfony\Component\Finder\SplFileInfo;
 
 final class Factory extends AbstractDocumentableClass
 {
-    public function __construct(SplFileInfo $fileInfo)
+    private Model $model;
+
+    public function __construct(SplFileInfo $fileInfo, Model $model)
     {
         parent::__construct($fileInfo);
+
+        $this->model = $model;
 
         if ( ! $this->reflectionClass->isSubclassOf(IlluminateFactory::class)) {
             throw new InvalidModelException('Class does not extend Illuminate\Database\Eloquent\Factories\Factory');
         }
+    }
+
+    public function getModel(): Model
+    {
+        return $this->model;
     }
 
     public static function fromModel(Model $model): ?self
@@ -35,7 +44,7 @@ final class Factory extends AbstractDocumentableClass
         $finder->files()->name("{$file}.php")->in($dir);
 
         foreach ($finder as $file) {
-            return new self($file);
+            return new self($file, $model);
         }
 
         return null;
