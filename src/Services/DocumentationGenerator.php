@@ -82,8 +82,19 @@ class DocumentationGenerator
         }
     }
 
-    public function generateFactoryDocBlock(Factory $model): ?Docblock
+    public function generateFactoryDocBlock(Factory $factory): ?Docblock
     {
+        $doc = new Docblock();
+
+        foreach (['created', 'make'] as $makeMethodName) {
+            $tag = new MethodTag();
+            $tag->setType($factory->getModel()->getQualifiedClassName());
+            $tag->setDescription($makeMethodName . '(array $attributes = [])');
+
+            $doc->appendTag($tag);
+        }
+
+        return $doc;
     }
 
     /**
@@ -152,6 +163,8 @@ class DocumentationGenerator
                 $tags[] = $property;
             }
         }
+
+        // 5. Generate "factory" method
 
         // Generate final Docblock
 
