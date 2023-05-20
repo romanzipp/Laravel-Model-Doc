@@ -2,10 +2,10 @@
 
 namespace romanzipp\ModelDoc\Tests;
 
-use gossi\docblock\Docblock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use phpowermove\docblock\Docblock;
 use Symfony\Component\Finder\SplFileInfo;
 
 class TestCase extends BaseTestCase
