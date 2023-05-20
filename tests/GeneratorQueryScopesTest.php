@@ -15,7 +15,7 @@ class GeneratorQueryScopesTest extends TestCase
             'model-doc.scopes.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelQueryScopes.php')
         ));
 
@@ -51,7 +51,7 @@ class GeneratorQueryScopesTest extends TestCase
             'model-doc.scopes.ignore' => ['whereSingleTypedParameter'],
         ]);
 
-        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelQueryScopes.php')
         ));
 
@@ -87,7 +87,7 @@ class GeneratorQueryScopesTest extends TestCase
             'model-doc.scopes.ignore' => ['/whereSingleTypedParameter.*/'],
         ]);
 
-        $doc = (new DocumentationGenerator())->generateDocBlock(new Model(
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelQueryScopes.php')
         ));
 

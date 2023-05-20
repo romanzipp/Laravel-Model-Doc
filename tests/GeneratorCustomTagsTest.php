@@ -14,7 +14,7 @@ class GeneratorCustomTagsTest extends TestCase
             'model-doc.custom_tags.mixins' => [],
         ]);
 
-        $doc = (new DocumentationGenerator())->generateDocBlock(new \romanzipp\ModelDoc\Services\Objects\Model(
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new \romanzipp\ModelDoc\Services\Objects\Model(
             $this->getFile(__DIR__ . '/Support/ModelEmpty.php')
         ));
 
@@ -33,7 +33,7 @@ class GeneratorCustomTagsTest extends TestCase
             ],
         ]);
 
-        $doc = (new DocumentationGenerator())->generateDocBlock(new \romanzipp\ModelDoc\Services\Objects\Model(
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new \romanzipp\ModelDoc\Services\Objects\Model(
             $this->getFile(__DIR__ . '/Support/ModelEmpty.php')
         ));
 
@@ -54,7 +54,7 @@ class GeneratorCustomTagsTest extends TestCase
             ],
         ]);
 
-        $doc = (new DocumentationGenerator())->generateDocBlock(new \romanzipp\ModelDoc\Services\Objects\Model(
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new \romanzipp\ModelDoc\Services\Objects\Model(
             $this->getFile(__DIR__ . '/Support/ModelEmpty.php')
         ));
 

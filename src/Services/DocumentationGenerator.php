@@ -64,10 +64,26 @@ class DocumentationGenerator
      * @param \romanzipp\ModelDoc\Services\Objects\Model $model
      *
      * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     */
+    public function generate(Model $model): void
+    {
+        $doc = $this->generateModelDocBlock($model);
+
+        if ($doc->isEmpty()) {
+            return;
+        }
+
+        $this->writeDoc($model, $doc);
+    }
+
+    /**
+     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     *
+     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
      *
      * @return \gossi\docblock\Docblock
      */
-    public function generateDocBlock(Model $model): Docblock
+    public function generateModelDocBlock(Model $model): Docblock
     {
         $tags = [];
 
@@ -127,6 +143,8 @@ class DocumentationGenerator
             }
         }
 
+        // Generate final Docblock
+
         if (true === config('model-doc.fail_when_empty') && empty($tags)) {
             throw new ModelDocumentationFailedException('The tag is empty');
         }
@@ -154,22 +172,6 @@ class DocumentationGenerator
         }
 
         return $doc;
-    }
-
-    /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
-     *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
-     */
-    public function generate(Model $model): void
-    {
-        $doc = $this->generateDocBlock($model);
-
-        if ($doc->isEmpty()) {
-            return;
-        }
-
-        $this->writeDoc($model, $doc);
     }
 
     /**
