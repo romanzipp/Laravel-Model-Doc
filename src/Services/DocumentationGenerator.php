@@ -131,20 +131,20 @@ class DocumentationGenerator
             throw new ModelDocumentationFailedException('The tag is empty');
         }
 
-        $uniques = [];
+        $uniqueTags = [];
 
         foreach ($tags as $index => $tag) {
-            if ( ! isset($uniques[$class = get_class($tag)])) {
-                $uniques[$class] = [];
+            if ( ! isset($uniqueTags[$class = get_class($tag)])) {
+                $uniqueTags[$class] = [];
             }
 
             $identifier = $tag instanceof MethodTag ? $tag->getDescription() : $tag->getVariable();
 
-            if ($found = ($uniques[$class][$identifier] ?? null)) {
+            if ($found = ($uniqueTags[$class][$identifier] ?? null)) {
                 unset($tags[$found]);
             }
 
-            $uniques[$class][$identifier] = $index;
+            $uniqueTags[$class][$identifier] = $index;
         }
 
         $doc = new Docblock();
