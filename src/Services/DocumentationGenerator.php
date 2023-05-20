@@ -16,7 +16,6 @@ use Illuminate\Support\Str;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
 use romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass;
-use romanzipp\ModelDoc\Services\Objects\Factory;
 use romanzipp\ModelDoc\Services\Objects\Model;
 use romanzipp\ModelDoc\Services\Tags\MixinTag;
 use Symfony\Component\Finder\Finder;
@@ -73,28 +72,6 @@ class DocumentationGenerator
         if ( ! $modelDoc->isEmpty()) {
             $this->writeDoc($model, $modelDoc);
         }
-
-        if (config('model-doc.factories.factories') && $factory = $model->getFactory()) {
-            $factoryDoc = $this->generateFactoryDocBlock($factory);
-            if ( ! $factoryDoc->isEmpty()) {
-                $this->writeDoc($factory, $factoryDoc);
-            }
-        }
-    }
-
-    public function generateFactoryDocBlock(Factory $factory): ?Docblock
-    {
-        $doc = new Docblock();
-
-        foreach (['created', 'make'] as $makeMethodName) {
-            $tag = new MethodTag();
-            $tag->setType($factory->getModel()->getQualifiedClassName());
-            $tag->setDescription($makeMethodName . '(array $attributes = [])');
-
-            $doc->appendTag($tag);
-        }
-
-        return $doc;
     }
 
     /**
