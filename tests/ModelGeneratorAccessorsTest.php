@@ -53,4 +53,27 @@ class ModelGeneratorAccessorsTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testAttributeAccessor()
+    {
+        config([
+            'model-doc.relations.enabled' => false,
+            'model-doc.attributes.enabled' => false,
+            'model-doc.accessors.enabled' => true,
+        ]);
+
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelAttributeCast.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property mixed $untyped',
+            ' * @property string $some_string',
+            ' * @property int $some_int',
+            ' * @property array $some_array',
+            ' * @property \romanzipp\ModelDoc\Tests\Support\ClassNotExtendingIlluminateModel $some_instance',
+            ' */',
+        ], $doc);
+    }
 }

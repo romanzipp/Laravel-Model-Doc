@@ -114,6 +114,19 @@ class DocumentationGenerator
             foreach ($this->getModelAccessors($reflectionClass) as $property) {
                 $tags[] = $property;
             }
+
+            // Generate properties from model accessors when using Attribute::make()
+            try {
+                /** @var \Illuminate\Database\Eloquent\Model $instance */
+                $instance = $reflectionClass->newInstance();
+            } catch (\ReflectionException $exception) {
+                throw new ModelDocumentationFailedException('Can not create model instance', 0, $exception);
+            }
+
+            foreach ($this->getModelAttributesCasts($reflectionClass, $instance) as $property) {
+                $tags[] = $property;
+            }
+
         }
 
         // 3. Generate properties from relation methods
@@ -221,6 +234,45 @@ class DocumentationGenerator
             $returnType = 'mixed';
 
             if (($reflectionType = $method->getReturnType()) !== null && ($typeReturn = self::getReflectionTypeDocReturn($reflectionType))) {
+                $returnType = $typeReturn;
+            }
+
+            $tag->setType($returnType);
+
+            yield $tag;
+        }
+    }
+
+    /**
+     * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
+     * @return \Generator<\phpowermove\docblock\tags\PropertyTag>
+     */
+    public function getModelAttributesCasts(\ReflectionClass $reflectionClass, IlluminateModel $model): \Generator
+    {
+
+        foreach ($reflectionClass->getMethods() as $method) {
+            if ( $method->getReturnType() != \Illuminate\Database\Eloquent\Casts\Attribute::class ) {
+                continue;
+            }
+
+            /** @var ?callable $get */
+            $get = $model->{$method->getName()}()->get;
+
+            if ($get === null) {
+                continue;
+            }
+
+            $tag = new PropertyTag();
+            $tag->setVariable(Str::snake($method->getName()));
+
+            $returnType = 'mixed';
+
+
+            $callableFunction = new \ReflectionFunction($get);
+
+            if (($reflectionType = $callableFunction->getReturnType()) !== null && ($typeReturn = self::getReflectionTypeDocReturn($reflectionType))) {
                 $returnType = $typeReturn;
             }
 
