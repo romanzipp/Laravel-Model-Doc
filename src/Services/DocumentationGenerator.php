@@ -257,6 +257,10 @@ class DocumentationGenerator
                 continue;
             }
 
+            if ( ! $method->isPublic() ) {
+                continue;
+            }
+
             /** @var ?callable $get */
             $get = $model->{$method->getName()}()->get;
 
@@ -268,7 +272,6 @@ class DocumentationGenerator
             $tag->setVariable(Str::snake($method->getName()));
 
             $returnType = 'mixed';
-
 
             $callableFunction = new \ReflectionFunction($get);
 
