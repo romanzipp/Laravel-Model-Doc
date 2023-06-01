@@ -68,6 +68,7 @@ class ModelGeneratorAccessorsTest extends TestCase
 
         self::assertDocBlock([
             '/**',
+            ' * @property mixed $get_only',
             ' * @property mixed $untyped',
             ' * @property string $some_string',
             ' * @property int $some_int',

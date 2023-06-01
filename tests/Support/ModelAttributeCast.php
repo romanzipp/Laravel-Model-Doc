@@ -16,6 +16,13 @@ class ModelAttributeCast extends EloquentModel
         );
     }
 
+    public function getOnly(): Attribute
+    {
+        return Attribute::get(function() {
+            return '';
+        });
+    }
+
     public function untyped(): Attribute
     {
         return Attribute::make(
