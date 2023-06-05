@@ -3,12 +3,9 @@
 namespace romanzipp\ModelDoc\Tests\Support;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
 
-class ModelAttributeCast extends EloquentModel
+class ModelAttributeCast extends ModelParent
 {
-    protected $table = 'table_one';
-
     public function setOnly(): Attribute
     {
         return Attribute::make(
