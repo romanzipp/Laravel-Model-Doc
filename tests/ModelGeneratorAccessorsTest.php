@@ -74,6 +74,7 @@ class ModelGeneratorAccessorsTest extends TestCase
             ' * @property int $some_int',
             ' * @property array $some_array',
             ' * @property \romanzipp\ModelDoc\Tests\Support\ClassNotExtendingIlluminateModel $some_instance',
+            ' * @property string $parent_definition',
             ' */',
         ], $doc);
     }

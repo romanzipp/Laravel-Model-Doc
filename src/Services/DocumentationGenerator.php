@@ -258,11 +258,11 @@ class DocumentationGenerator
             }
 
             if ( ! $method->isPublic() ) {
-                continue;
+                $method->setAccessible(true);
             }
 
             /** @var ?callable $get */
-            $get = $model->{$method->getName()}()->get;
+            $get = $method->invoke($model)?->get;
 
             if ($get === null) {
                 continue;
