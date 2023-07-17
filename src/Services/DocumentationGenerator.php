@@ -25,7 +25,7 @@ class DocumentationGenerator
     /**
      * @var callable|null
      */
-    public static $pathCallback = null;
+    public static $pathCallback;
 
     public static function usePath(callable $pathCallback): void
     {
