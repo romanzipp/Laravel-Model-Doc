@@ -68,12 +68,18 @@ class ModelGeneratorAccessorsTest extends TestCase
 
         self::assertDocBlock([
             '/**',
+            ' * @property mixed $getOnly',
             ' * @property mixed $get_only',
             ' * @property mixed $untyped',
+            ' * @property string $someString',
             ' * @property string $some_string',
+            ' * @property int $someInt',
             ' * @property int $some_int',
+            ' * @property array $someArray',
             ' * @property array $some_array',
+            ' * @property \romanzipp\ModelDoc\Tests\Support\ClassNotExtendingIlluminateModel $someInstance',
             ' * @property \romanzipp\ModelDoc\Tests\Support\ClassNotExtendingIlluminateModel $some_instance',
+            ' * @property string $parentDefinition',
             ' * @property string $parent_definition',
             ' */',
         ], $doc);
