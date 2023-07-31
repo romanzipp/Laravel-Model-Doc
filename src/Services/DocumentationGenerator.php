@@ -268,8 +268,8 @@ class DocumentationGenerator
                 continue;
             }
 
-            $tag = new PropertyTag();
-            $tag->setVariable(Str::snake($method->getName()));
+            $camelCaseTag = new PropertyTag();
+            $camelCaseTag->setVariable($methodName = $method->getName());
 
             $returnType = 'mixed';
 
