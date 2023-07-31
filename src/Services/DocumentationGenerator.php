@@ -279,9 +279,13 @@ class DocumentationGenerator
                 $returnType = $typeReturn;
             }
 
-            $tag->setType($returnType);
+            $camelCaseTag->setType($returnType);
 
-            yield $tag;
+            $snakeCaseTag = clone $camelCaseTag;
+            $snakeCaseTag->setVariable(Str::snake($methodName));
+
+            yield $camelCaseTag;
+            yield $snakeCaseTag;
         }
     }
 
