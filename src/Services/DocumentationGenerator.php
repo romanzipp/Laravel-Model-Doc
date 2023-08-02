@@ -126,7 +126,6 @@ class DocumentationGenerator
             foreach ($this->getModelAttributesCasts($reflectionClass, $instance) as $property) {
                 $tags[] = $property;
             }
-
         }
 
         // 3. Generate properties from relation methods
@@ -251,20 +250,19 @@ class DocumentationGenerator
      */
     public function getModelAttributesCasts(\ReflectionClass $reflectionClass, IlluminateModel $model): \Generator
     {
-
         foreach ($reflectionClass->getMethods() as $method) {
-            if ( $method->getReturnType() != \Illuminate\Database\Eloquent\Casts\Attribute::class ) {
+            if (\Illuminate\Database\Eloquent\Casts\Attribute::class != $method->getReturnType()) {
                 continue;
             }
 
-            if ( ! $method->isPublic() ) {
+            if ( ! $method->isPublic()) {
                 $method->setAccessible(true);
             }
 
             /** @var ?callable $get */
             $get = $method->invoke($model)?->get;
 
-            if ($get === null) {
+            if (null === $get) {
                 continue;
             }
 

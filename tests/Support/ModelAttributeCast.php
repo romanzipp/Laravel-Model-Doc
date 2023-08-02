@@ -15,7 +15,7 @@ class ModelAttributeCast extends ModelParent
 
     public function getOnly(): Attribute
     {
-        return Attribute::get(function() {
+        return Attribute::get(function () {
             return '';
         });
     }
