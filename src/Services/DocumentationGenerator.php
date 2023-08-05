@@ -110,7 +110,7 @@ class DocumentationGenerator
 
         // 2. Generate properties from model accessors
 
-        if (true === config('model-doc.accessors.enabled')) {
+        if (true === config('model-doc.accessors.enabled') && ! $reflectionClass->isAbstract()) {
             foreach ($this->getModelAccessors($reflectionClass) as $property) {
                 $tags[] = $property;
             }
