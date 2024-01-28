@@ -5,7 +5,6 @@ namespace romanzipp\ModelDoc\Services\Docblock;
 use phootwork\collection\ArrayList;
 use phootwork\collection\Map;
 use phpowermove\docblock\Docblock as OriginalDocblock;
-use phpowermove\docblock\TagNameComparator;
 use phpowermove\docblock\tags\AbstractTag;
 use romanzipp\ModelDoc\Services\Tags\EmptyLineTag;
 
