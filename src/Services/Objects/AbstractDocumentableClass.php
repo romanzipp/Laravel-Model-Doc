@@ -20,9 +20,9 @@ abstract class AbstractDocumentableClass
     /**
      * Model constructor.
      *
-     * @param \Symfony\Component\Finder\SplFileInfo $fileInfo
+     * @param SplFileInfo $fileInfo
      *
-     * @throws \romanzipp\ModelDoc\Exceptions\InvalidModelException
+     * @throws InvalidModelException
      */
     public function __construct(SplFileInfo $fileInfo)
     {
