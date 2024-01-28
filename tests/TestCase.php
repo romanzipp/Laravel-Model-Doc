@@ -18,6 +18,7 @@ class TestCase extends BaseTestCase
             'model-doc.relations.enabled' => true,
             'model-doc.relations.counts.enabled' => true,
             'model-doc.attributes.enabled' => true,
+            'model-doc.tag_sorting' => [],
         ]);
 
         $this->setupDatabase($this->app);
