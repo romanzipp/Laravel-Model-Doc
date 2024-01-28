@@ -21,23 +21,18 @@ class ModelGeneratorRelationsTest extends TestCase
 
         self::assertDocBlock([
             '/**',
-            // BelongsTo
             ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $belongsToRelation',
-            ' * @property int|null $belongs_to_relations_count',
-            // BelongsToMany
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $belongsToManyRelation',
-            ' * @property int|null $belongs_to_many_relations_count',
-            // HasOne
             ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
-            ' * @property int|null $has_one_relations_count',
-            // HasOneThrough
             ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneThroughRelation',
-            ' * @property int|null $has_one_through_relations_count',
-            // HasMany
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
-            ' * @property int|null $has_many_relations_count',
-            // HasManyThrough
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyThroughRelation',
+            ' *',
+            ' * @property int|null $belongs_to_relations_count',
+            ' * @property int|null $belongs_to_many_relations_count',
+            ' * @property int|null $has_one_relations_count',
+            ' * @property int|null $has_one_through_relations_count',
+            ' * @property int|null $has_many_relations_count',
             ' * @property int|null $has_many_through_relations_count',
             ' */',
         ], $doc);
@@ -118,8 +113,9 @@ class ModelGeneratorRelationsTest extends TestCase
         self::assertDocBlock([
             '/**',
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesUp',
-            ' * @property int|null $votes_up_count',
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesDown',
+            ' *',
+            ' * @property int|null $votes_up_count',
             ' * @property int|null $votes_down_count',
             ' */',
         ], $doc);
@@ -139,16 +135,17 @@ class ModelGeneratorRelationsTest extends TestCase
         self::assertDocBlock([
             '/**',
             ' * @property-read \Illuminate\Database\Eloquent\Model|null $morphToRelation',
-            ' * @property int|null $morph_to_relations_count',
             ' * @property-read \Illuminate\Database\Eloquent\Model|null $morphToRelationWithType',
-            ' * @property int|null $morph_to_relation_with_types_count',
             ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $morphOneRelation',
-            ' * @property int|null $morph_one_relations_count',
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphManyRelation',
-            ' * @property int|null $morph_many_relations_count',
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphToManyRelation',
-            ' * @property int|null $morph_to_many_relations_count',
             ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphedByManyRelation',
+            ' *',
+            ' * @property int|null $morph_to_relations_count',
+            ' * @property int|null $morph_to_relation_with_types_count',
+            ' * @property int|null $morph_one_relations_count',
+            ' * @property int|null $morph_many_relations_count',
+            ' * @property int|null $morph_to_many_relations_count',
             ' * @property int|null $morphed_by_many_relations_count',
             ' */',
         ], $doc);
