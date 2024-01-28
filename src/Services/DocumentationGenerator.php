@@ -408,7 +408,7 @@ class DocumentationGenerator
      * @param \ReflectionMethod $reflectionMethod
      * @param Relations\Relation $relation
      *
-     * @return \phpowermove\docblock\tags\PropertyTag[]
+     * @return \phpowermove\docblock\tags\PropertyReadTag[]
      */
     private function getPropertiesForRelation(\ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
     {
