@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Str;
 use phpowermove\docblock\tags\MethodTag;
+use phpowermove\docblock\tags\PropertyReadTag;
 use phpowermove\docblock\tags\PropertyTag;
 use romanzipp\ModelDoc\Exceptions\InvalidModelException;
 use romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException;
@@ -443,7 +444,7 @@ class DocumentationGenerator
                 'null',
             ];
 
-        $relationProperty = new PropertyTag();
+        $relationProperty = new PropertyReadTag();
         $relationProperty->setVariable("\${$reflectionMethod->getName()}");
         $relationProperty->setType(
             implode('|', $propertyReturns)
