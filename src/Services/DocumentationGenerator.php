@@ -650,9 +650,11 @@ class DocumentationGenerator
             switch ($typeClass = get_class($column->getType())) {
                 case Types\IntegerType::class:
                 case Types\BigIntType::class:
+                case Types\SmallIntType::class:
                     $types[] = 'int';
                     break;
                 case Types\FloatType::class:
+                case Types\DecimalType::class:
                     $types[] = 'float';
                     break;
                 case Types\StringType::class:
