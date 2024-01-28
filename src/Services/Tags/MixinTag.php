@@ -6,6 +6,14 @@ use phpowermove\docblock\tags\AbstractDescriptionTag;
 
 class MixinTag extends AbstractDescriptionTag
 {
+    /**
+	 * {@inheritdoc}
+	 */
+	public function getTagName(): string
+    {
+		return 'mixin';
+	}
+
     protected function parse(string $content): void
     {
         if ('\\' !== substr($content, 0, 1)) {

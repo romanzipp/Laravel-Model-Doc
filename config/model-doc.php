@@ -56,4 +56,10 @@ return [
             // \Illuminate\Database\Eloquent\Model::class,
         ],
     ],
+
+    'tag_sorting' => [
+        'see', 'author', 'property', 'property-read', 'property-write',
+        'method', 'deprecated', 'since', 'version', 'var', 'type', 'param',
+        'throws', 'mixin', 'return',
+    ],
 ];
