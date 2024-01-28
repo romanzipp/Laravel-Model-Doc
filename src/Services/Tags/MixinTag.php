@@ -7,12 +7,12 @@ use phpowermove\docblock\tags\AbstractDescriptionTag;
 class MixinTag extends AbstractDescriptionTag
 {
     /**
-	 * {@inheritdoc}
-	 */
-	public function getTagName(): string
+     * {@inheritdoc}
+     */
+    public function getTagName(): string
     {
-		return 'mixin';
-	}
+        return 'mixin';
+    }
 
     protected function parse(string $content): void
     {

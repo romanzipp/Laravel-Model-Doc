@@ -62,9 +62,9 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     * @param Model $model
      *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     * @throws ModelDocumentationFailedException
      */
     public function generate(Model $model): void
     {
@@ -75,11 +75,11 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     * @param Model $model
      *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     * @throws ModelDocumentationFailedException
      *
-     * @return \romanzipp\ModelDoc\Services\Docblock\Docblock
+     * @return Docblock
      */
     public function generateModelDocBlock(Model $model): Docblock
     {
@@ -97,7 +97,7 @@ class DocumentationGenerator
 
         if (true === config('model-doc.attributes.enabled') && ! $reflectionClass->isAbstract()) {
             try {
-                /** @var \Illuminate\Database\Eloquent\Model $instance */
+                /** @var IlluminateModel $instance */
                 $instance = $reflectionClass->newInstance();
             } catch (\ReflectionException $exception) {
                 throw new ModelDocumentationFailedException('Can not create model instance', 0, $exception);
@@ -117,7 +117,7 @@ class DocumentationGenerator
 
             // Generate properties from model accessors when using Attribute::make()
             try {
-                /** @var \Illuminate\Database\Eloquent\Model $instance */
+                /** @var IlluminateModel $instance */
                 $instance = $reflectionClass->newInstance();
             } catch (\ReflectionException $exception) {
                 throw new ModelDocumentationFailedException('Can not create model instance', 0, $exception);
@@ -133,7 +133,7 @@ class DocumentationGenerator
         if (isset($instance) && true === config('model-doc.relations.enabled')) {
             foreach ($this->getModelRelationMethods($reflectionClass) as $reflectionMethod) {
                 try {
-                    /** @var \Illuminate\Database\Eloquent\Relations\Relation $relation */
+                    /** @var Relations\Relation $relation */
                     $relation = $instance->{$reflectionMethod->getName()}();
 
                     foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
@@ -193,7 +193,7 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \romanzipp\ModelDoc\Services\Objects\Model $model
+     * @param Model $model
      *
      * @return array|\phpowermove\docblock\tags\MethodTag[]
      */
@@ -244,7 +244,7 @@ class DocumentationGenerator
 
     /**
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param IlluminateModel $model
      *
      * @return \Generator<\phpowermove\docblock\tags\PropertyTag>
      */
@@ -405,7 +405,7 @@ class DocumentationGenerator
 
     /**
      * @param \ReflectionMethod $reflectionMethod
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation
+     * @param Relations\Relation $relation
      *
      * @return \phpowermove\docblock\tags\PropertyTag[]
      */
@@ -468,10 +468,10 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \romanzipp\ModelDoc\Services\Objects\AbstractDocumentableClass $model
-     * @param \romanzipp\ModelDoc\Services\Docblock\Docblock $docblock
+     * @param AbstractDocumentableClass $model
+     * @param Docblock $docblock
      *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     * @throws ModelDocumentationFailedException
      */
     private function writeDoc(AbstractDocumentableClass $model, Docblock $docblock): void
     {
@@ -523,9 +523,9 @@ class DocumentationGenerator
 
     /**
      * @param \ReflectionClass<\Illuminate\Database\Eloquent\Model> $reflectionClass
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param IlluminateModel $model
      *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     * @throws ModelDocumentationFailedException
      *
      * @return \Generator<\phpowermove\docblock\tags\PropertyTag>
      */
@@ -608,10 +608,10 @@ class DocumentationGenerator
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @param \Doctrine\DBAL\Schema\Column $column
+     * @param IlluminateModel $model
+     * @param Column $column
      *
-     * @throws \romanzipp\ModelDoc\Exceptions\ModelDocumentationFailedException
+     * @throws ModelDocumentationFailedException
      *
      * @return array<string>
      */
