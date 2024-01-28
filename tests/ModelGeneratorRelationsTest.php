@@ -22,22 +22,22 @@ class ModelGeneratorRelationsTest extends TestCase
         self::assertDocBlock([
             '/**',
             // BelongsTo
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $belongsToRelation',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $belongsToRelation',
             ' * @property int|null $belongs_to_relations_count',
             // BelongsToMany
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $belongsToManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $belongsToManyRelation',
             ' * @property int|null $belongs_to_many_relations_count',
             // HasOne
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
             ' * @property int|null $has_one_relations_count',
             // HasOneThrough
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneThroughRelation',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneThroughRelation',
             ' * @property int|null $has_one_through_relations_count',
             // HasMany
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
             ' * @property int|null $has_many_relations_count',
             // HasManyThrough
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyThroughRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyThroughRelation',
             ' * @property int|null $has_many_through_relations_count',
             ' */',
         ], $doc);
@@ -57,17 +57,17 @@ class ModelGeneratorRelationsTest extends TestCase
         self::assertDocBlock([
             '/**',
             // BelongsTo
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $belongsToRelation',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $belongsToRelation',
             // BelongsToMany
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $belongsToManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $belongsToManyRelation',
             // HasOne
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneRelation',
             // HasOneThrough
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneThroughRelation',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $hasOneThroughRelation',
             // HasMany
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyRelation',
             // HasManyThrough
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyThroughRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $hasManyThroughRelation',
             ' */',
         ], $doc);
     }
@@ -117,9 +117,9 @@ class ModelGeneratorRelationsTest extends TestCase
 
         self::assertDocBlock([
             '/**',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesUp',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesUp',
             ' * @property int|null $votes_up_count',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesDown',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $votesDown',
             ' * @property int|null $votes_down_count',
             ' */',
         ], $doc);
@@ -138,17 +138,17 @@ class ModelGeneratorRelationsTest extends TestCase
 
         self::assertDocBlock([
             '/**',
-            ' * @property \Illuminate\Database\Eloquent\Model|null $morphToRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Model|null $morphToRelation',
             ' * @property int|null $morph_to_relations_count',
-            ' * @property \Illuminate\Database\Eloquent\Model|null $morphToRelationWithType',
+            ' * @property-read \Illuminate\Database\Eloquent\Model|null $morphToRelationWithType',
             ' * @property int|null $morph_to_relation_with_types_count',
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $morphOneRelation',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $morphOneRelation',
             ' * @property int|null $morph_one_relations_count',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphManyRelation',
             ' * @property int|null $morph_many_relations_count',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphToManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphToManyRelation',
             ' * @property int|null $morph_to_many_relations_count',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphedByManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphedByManyRelation',
             ' * @property int|null $morphed_by_many_relations_count',
             ' */',
         ], $doc);
@@ -167,12 +167,12 @@ class ModelGeneratorRelationsTest extends TestCase
 
         self::assertDocBlock([
             '/**',
-            ' * @property \Illuminate\Database\Eloquent\Model|null $morphToRelation',
-            ' * @property \Illuminate\Database\Eloquent\Model|null $morphToRelationWithType',
-            ' * @property \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $morphOneRelation',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphManyRelation',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphToManyRelation',
-            ' * @property \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphedByManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Model|null $morphToRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Model|null $morphToRelationWithType',
+            ' * @property-read \romanzipp\ModelDoc\Tests\Support\Related\RelatedModel|null $morphOneRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphToManyRelation',
+            ' * @property-read \Illuminate\Database\Eloquent\Collection|\romanzipp\ModelDoc\Tests\Support\Related\RelatedModel[] $morphedByManyRelation',
             ' */',
         ], $doc);
     }
