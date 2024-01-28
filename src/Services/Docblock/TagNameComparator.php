@@ -6,6 +6,9 @@ use phpowermove\docblock\TagNameComparator as OriginalTagNameComparator;
 
 class TagNameComparator extends OriginalTagNameComparator
 {
+    /**
+     * @var array<string>
+     */
     private readonly array $order;
 
     public function __construct()
