@@ -9,7 +9,7 @@ class TagNameComparator extends OriginalTagNameComparator
     /**
      * @var array<string>
      */
-    private readonly array $order;
+    private array $order;
 
     public function __construct()
     {
