@@ -16,23 +16,23 @@ class TagNameComparator extends OriginalTagNameComparator
         $this->order = config('model-doc.tag_sorting');
     }
 
-	public function compare($a, $b): int
+    public function compare($a, $b): int
     {
-		if ($a == $b) {
-			return 0;
-		}
+        if ($a == $b) {
+            return 0;
+        }
 
-		if (!in_array($a, $this->order)) {
-			return -1;
-		}
+        if ( ! in_array($a, $this->order)) {
+            return -1;
+        }
 
-		if (!in_array($b, $this->order)) {
-			return 1;
-		}
+        if ( ! in_array($b, $this->order)) {
+            return 1;
+        }
 
-		$pos1 = array_search($a, $this->order);
-		$pos2 = array_search($b, $this->order);
+        $pos1 = array_search($a, $this->order);
+        $pos2 = array_search($b, $this->order);
 
-		return $pos1 < $pos2 ? -1 : 1;
-	}
+        return $pos1 < $pos2 ? -1 : 1;
+    }
 }
