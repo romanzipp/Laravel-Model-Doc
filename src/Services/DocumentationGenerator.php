@@ -736,6 +736,14 @@ class DocumentationGenerator
                 return '\\' . get_class(now());
         }
 
+        if (class_exists($castType)) {
+            $reflectionClass = new \ReflectionClass($castType);
+
+            if ($reflectionClass->isEnum()) {
+                return '\\' . $castType;
+            }
+        }
+
         return null;
     }
 
