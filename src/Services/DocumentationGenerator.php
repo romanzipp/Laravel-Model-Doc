@@ -2,9 +2,6 @@
 
 namespace romanzipp\ModelDoc\Services;
 
-use Doctrine\DBAL\Exception as DoctrineException;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Types;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
@@ -553,24 +550,12 @@ class DocumentationGenerator
 
         $connection = $model->getConnection();
 
-        /**
-         * @phpstan-ignore-next-line
-         *
-         * @var \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager
-         */
-        $schemaManager = $connection->getDoctrineSchemaManager();
+        $schemaBuilder = $connection->getSchemaBuilder();
 
-        // Fix: "Doctrine\DBAL\Exception: Unknown database type enum requested, Doctrine\DBAL\Platforms\MariaDb1027Platform may not support it."
-        $schemaManager->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
-        try {
-            $tableColumns = $schemaManager->listTableColumns($model->getTable());
-        } catch (DoctrineException $exception) {
-            throw new ModelDocumentationFailedException("Can not list table columns for table {$model->getTable()}", 0, $exception);
-        }
+        $tableColumns = $schemaBuilder->getColumns($model->getTable());
 
         foreach ($tableColumns as $tableColumn) {
-            $name = $tableColumn->getName();
+            $name = $tableColumn['name'];
 
             if ($hasAccessor($name)) {
                 continue;
@@ -598,8 +583,8 @@ class DocumentationGenerator
                 );
             }
 
-            if ($comment = $tableColumn->getComment()) {
-                $property->setDescription($comment);
+            if (filled($tableColumn['comment'])) {
+                $property->setDescription($tableColumn['comment']);
             }
 
             yield $property;
@@ -608,27 +593,27 @@ class DocumentationGenerator
 
     /**
      * @param IlluminateModel $model
-     * @param Column $column
+     * @param array<string, mixed> $column
      *
      * @throws ModelDocumentationFailedException
      *
      * @return array<string>
      */
-    private function getTypesForTableColumn(IlluminateModel $model, Column $column): array
+    private function getTypesForTableColumn(IlluminateModel $model, array $column): array
     {
         $types = [];
 
         if (method_exists($model, 'getStates')) {
             /** @phpstan-ignore-next-line */
             foreach ($model::getStates() as $stateAttribute => $state) {
-                if ($column->getName() !== $stateAttribute) {
+                if ($column['name'] !== $stateAttribute) {
                     continue;
                 }
 
                 try {
                     $class = new \ReflectionClass($state->first());
                 } catch (\ReflectionException $exception) {
-                    throw new ModelDocumentationFailedException("Failed get type for database column {$column->getName()} on table {$model->getTable()}", 0, $exception);
+                    throw new ModelDocumentationFailedException("Failed get type for database column {$column['name']} on table {$model->getTable()}", 0, $exception);
                 }
 
                 $types[] = '\\' . $class->getParentClass()->getName();
@@ -636,7 +621,7 @@ class DocumentationGenerator
         }
 
         foreach ($model->getDates() as $date) {
-            if ($column->getName() !== $date) {
+            if ($column['name'] !== $date) {
                 continue;
             }
 
@@ -644,31 +629,37 @@ class DocumentationGenerator
         }
 
         if (empty($types)) {
-            switch ($typeClass = get_class($column->getType())) {
-                case Types\IntegerType::class:
-                case Types\BigIntType::class:
-                case Types\SmallIntType::class:
+            switch ($column['type_name'] ?? null) {
+                case 'integer':
+                case 'bigint':
+                case 'smallint':
                     $types[] = 'int';
                     break;
-                case Types\FloatType::class:
-                case Types\DecimalType::class:
+                case 'float':
+                case 'double':
+                case 'decimal':
                     $types[] = 'float';
                     break;
-                case Types\StringType::class:
-                case Types\TextType::class:
-                case Types\JsonType::class:
-                case Types\DateTimeType::class:
+                case 'string':
+                case 'varchar':
+                case 'text':
+                case 'json':
+                case 'datetime':
+                case 'date':
+                case 'time':
+                case 'timestamp':
                     $types[] = 'string';
                     break;
-                case Types\BooleanType::class:
+                case 'boolean':
+                case 'tinyint':
                     $types[] = 'bool';
                     break;
                 default:
-                    $types[] = config('model-doc.attributes.fallback_type') ? '\\' . $typeClass : 'mixed';
+                    $types[] = config('model-doc.attributes.fallback_type') ?: 'mixed';
             }
         }
 
-        if (false === $column->getNotnull()) {
+        if ($column['nullable'] ?? false) {
             $types[] = 'null';
         }
 
