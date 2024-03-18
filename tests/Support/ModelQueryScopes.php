@@ -87,7 +87,7 @@ class ModelQueryScopes extends EloquentModel
         $builder->where('id', $id);
     }
 
-    public function scopeWhereParameterDefaultNull(Builder $builder, string $id = null)
+    public function scopeWhereParameterDefaultNull(Builder $builder, ?string $id = null)
     {
         $builder->where('id', $id);
     }
