@@ -629,36 +629,36 @@ class DocumentationGenerator
         }
 
         if (empty($types)) {
-            switch ($column['type_name'] ?? null) {
-                case 'int': // newly introduced in Laravel 11
-                case 'integer':
-                case 'bigint':
-                case 'smallint':
-                    $types[] = 'int';
-                    break;
-                case 'float':
-                case 'double':
-                case 'decimal':
-                    $types[] = 'float';
-                    break;
-                case 'string':
-                case 'varchar':
-                case 'text':
-                case 'json':
-                case 'datetime':
-                case 'date':
-                case 'time':
-                case 'timestamp':
-                case 'enum': // newly introduced in Laravel 11
-                    $types[] = 'string';
-                    break;
-                case 'boolean':
-                case 'tinyint':
-                    $types[] = 'bool';
-                    break;
-                default:
-                    $types[] = config('model-doc.attributes.fallback_type') ?: 'mixed';
-            }
+            $types[] = match ($column['type_name'] ?? null) {
+                'int',
+                'integer',
+                'mediumint',
+                'bigint',
+                'smallint' => 'int',
+                // -----------------------------
+                'float',
+                'double',
+                'decimal' => 'float',
+                // -----------------------------
+                'string',
+                'varchar',
+                'char',
+                'text',
+                'tinytext',
+                'mediumtext',
+                'longtext',
+                'json',
+                'datetime',
+                'date',
+                'time',
+                'timestamp',
+                'enum' => 'string',
+                // -----------------------------
+                'boolean',
+                'tinyint' => 'bool',
+                // -----------------------------
+                default => dd($column)&&config('model-doc.attributes.fallback_type') ?: 'mixed'
+            };
         }
 
         if ($column['nullable'] ?? false) {
