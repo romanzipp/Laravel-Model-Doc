@@ -19,6 +19,7 @@ class TestCase extends BaseTestCase
             'model-doc.relations.counts.enabled' => true,
             'model-doc.attributes.enabled' => true,
             'model-doc.tag_sorting' => [],
+            'model-doc.attributes.fallback_type' => Support\Files\Model::class,
         ]);
 
         $this->setupDatabase($this->app);
@@ -70,6 +71,8 @@ class TestCase extends BaseTestCase
             $table->ipAddress('column_ip_address');
             $table->macAddress('column_mac_address');
         });
+
+        $app['db']->connection()->statement('ALTER TABLE table_extended ADD COLUMN column_custom_fallback custom_type NOT NULL');
 
         $app['db']->connection()->getSchemaBuilder()->create('table_special', function (Blueprint $table) {
             $table->enum('column_enum', ['one', 'two']);

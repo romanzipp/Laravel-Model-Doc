@@ -51,6 +51,7 @@ class ModelGeneratorAttributesTest extends TestCase
             ' * @property string $column_ulid',
             ' * @property string $column_ip_address',
             ' * @property string $column_mac_address',
+            ' * @property ' . Support\Files\Model::class . ' $column_custom_fallback',
             ' */',
         ], $doc);
     }
