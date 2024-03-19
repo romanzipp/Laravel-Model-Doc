@@ -630,6 +630,7 @@ class DocumentationGenerator
 
         if (empty($types)) {
             switch ($column['type_name'] ?? null) {
+                case 'int': // newly introduced in Laravel 11
                 case 'integer':
                 case 'bigint':
                 case 'smallint':
@@ -648,6 +649,7 @@ class DocumentationGenerator
                 case 'date':
                 case 'time':
                 case 'timestamp':
+                case 'enum': // newly introduced in Laravel 11
                     $types[] = 'string';
                     break;
                 case 'boolean':
@@ -688,11 +690,11 @@ class DocumentationGenerator
     }
 
     /**
-     * @internal
-     *
      * @param string $castType
      *
-     * @return string
+     * @return string|null
+     *
+     * @internal
      */
     public static function getReturnTypeForCast(string $castType): ?string
     {
