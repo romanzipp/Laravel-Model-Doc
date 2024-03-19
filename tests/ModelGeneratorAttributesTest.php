@@ -25,6 +25,36 @@ class ModelGeneratorAttributesTest extends TestCase
         ], $doc);
     }
 
+    public function testExtendedAttributes()
+    {
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelExtended.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property int $column_tiny_integer',
+            ' * @property int $column_small_integer',
+            ' * @property int $column_medium_integer',
+            ' * @property int $column_big_integer',
+            ' * @property string $column_char',
+            ' * @property string $column_string',
+            ' * @property string $column_tiny_text',
+            ' * @property string $column_text',
+            ' * @property string $column_medium_text',
+            ' * @property string $column_long_text',
+            ' * @property string $column_json',
+            ' * @property string $column_jsonb',
+            ' * @property int $column_year',
+            ' * @property string $column_binary',
+            ' * @property string $column_uuid',
+            ' * @property string $column_ulid',
+            ' * @property string $column_ip_address',
+            ' * @property string $column_mac_address',
+            ' */',
+        ], $doc);
+    }
+
     public function testAttributesDisabled()
     {
         config([

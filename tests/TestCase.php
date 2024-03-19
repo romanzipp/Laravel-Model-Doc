@@ -48,6 +48,29 @@ class TestCase extends BaseTestCase
             $table->boolean('column_boolean_nullable')->nullable();
         });
 
+        $app['db']->connection()->getSchemaBuilder()->create('table_extended', function (Blueprint $table) {
+            $table->tinyInteger('column_tiny_integer');
+            $table->smallInteger('column_small_integer');
+            $table->mediumInteger('column_medium_integer');
+            $table->bigInteger('column_big_integer');
+
+            $table->char('column_char');
+            $table->string('column_string');
+            $table->tinyText('column_tiny_text');
+            $table->text('column_text');
+            $table->mediumText('column_medium_text');
+            $table->longText('column_long_text');
+
+            $table->json('column_json');
+            $table->jsonb('column_jsonb');
+            $table->year('column_year');
+            $table->binary('column_binary');
+            $table->uuid('column_uuid');
+            $table->ulid('column_ulid');
+            $table->ipAddress('column_ip_address');
+            $table->macAddress('column_mac_address');
+        });
+
         $app['db']->connection()->getSchemaBuilder()->create('table_special', function (Blueprint $table) {
             $table->enum('column_enum', ['one', 'two']);
         });

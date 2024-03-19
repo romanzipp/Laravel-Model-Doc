@@ -634,7 +634,8 @@ class DocumentationGenerator
                 'integer',
                 'mediumint',
                 'bigint',
-                'smallint' => 'int',
+                'smallint',
+                'year' => 'int',
                 // -----------------------------
                 'float',
                 'double',
@@ -652,12 +653,13 @@ class DocumentationGenerator
                 'date',
                 'time',
                 'timestamp',
+                'blob',
                 'enum' => 'string',
                 // -----------------------------
                 'boolean',
                 'tinyint' => 'bool',
                 // -----------------------------
-                default => dd($column)&&config('model-doc.attributes.fallback_type') ?: 'mixed'
+                default => config('model-doc.attributes.fallback_type') ?: 'mixed'
             };
         }
 
