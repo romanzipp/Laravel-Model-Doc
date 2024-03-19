@@ -20,7 +20,9 @@ return [
     'attributes' => [
         'enabled' => true,
 
-        // Use dbal class type if col type not mapped
+        // Use any class or PHP native type as a fallback for column types that cannot be resolved
+        // Examples: "string", "int", \App\Database\MyCustomFallbackType::class
+        // If false the type will be set to "mixed"
         'fallback_type' => false,
     ],
 
