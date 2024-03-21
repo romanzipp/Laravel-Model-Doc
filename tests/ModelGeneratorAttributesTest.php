@@ -101,4 +101,32 @@ class ModelGeneratorAttributesTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testCustomTypeMappings()
+    {
+        config([
+            'model-doc.attributes.custom_mappings' => [
+                'integer' => Support\Files\Model::class,
+            ],
+        ]);
+
+        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelBasic.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property \\' . Support\Files\Model::class . ' $column_integer',
+            ' * @property \\' . Support\Files\Model::class . '|null $column_integer_nullable',
+            ' * @property string $column_string',
+            ' * @property string|null $column_string_nullable',
+            ' * @property bool $column_boolean',
+            ' * @property bool|null $column_boolean_nullable',
+            ' */',
+        ], $doc);
+
+        config([
+            'model-doc.attributes.custom_mappings' => [],
+        ]);
+    }
 }

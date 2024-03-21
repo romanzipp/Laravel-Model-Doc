@@ -603,6 +603,15 @@ class DocumentationGenerator
     {
         $types = [];
 
+        $customMapping = config('model-doc.attributes.custom_mappings.' . $column['type_name'] ?? null);
+        if (null !== $customMapping) {
+            if (class_exists($customMapping)) {
+                $types[] = '\\' . $customMapping;
+            } else {
+                $types[] = $customMapping;
+            }
+        }
+
         if (method_exists($model, 'getStates')) {
             /** @phpstan-ignore-next-line */
             foreach ($model::getStates() as $stateAttribute => $state) {
@@ -659,7 +668,7 @@ class DocumentationGenerator
                 'boolean',
                 'tinyint' => 'bool',
                 // -----------------------------
-                default => config('model-doc.attributes.fallback_type') ?: 'mixed'
+                default => 'mixed'
             };
         }
 
