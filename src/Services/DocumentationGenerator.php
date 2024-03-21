@@ -605,10 +605,11 @@ class DocumentationGenerator
 
         $customMapping = config('model-doc.attributes.custom_mappings.' . $column['type_name'] ?? null);
         if (null !== $customMapping) {
-            if (class_exists($customMapping)) {
-                $types[] = '\\' . $customMapping;
-            } else {
-                $types[] = $customMapping;
+            $types = explode('|', $customMapping);
+            foreach ($types as $index => $type) {
+                if (class_exists($type)) {
+                    $types[$index] = '\\' . $type;
+                }
             }
         }
 
