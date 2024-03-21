@@ -662,10 +662,12 @@ class DocumentationGenerator
                 'date',
                 'time',
                 'timestamp',
+                'uniqueidentifier',
                 'blob',
                 'enum' => 'string',
                 // -----------------------------
                 'boolean',
+                'bit',
                 'tinyint' => 'bool',
                 // -----------------------------
                 default => 'mixed'
