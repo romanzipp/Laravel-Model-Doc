@@ -5,3 +5,4 @@ parameters:
     - src
   ignoreErrors:
     - '#contains generic class#'
+    - '#with generic class#'
