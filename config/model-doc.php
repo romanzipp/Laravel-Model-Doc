@@ -13,7 +13,7 @@ return [
         ],
 
         // Base model class to be used for MorphTo relation return type
-        'base_model' => Illuminate\Database\Eloquent\Model::class,
+        'base_model' => \Illuminate\Database\Eloquent\Model::class,
     ],
 
     // Generate PHPDoc properties for database columns
