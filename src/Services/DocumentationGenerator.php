@@ -636,6 +636,7 @@ class DocumentationGenerator
                 'mediumint',
                 'bigint',
                 'smallint',
+                'tinyint',
                 'year' => 'int',
                 // -----------------------------
                 'float',
@@ -657,8 +658,7 @@ class DocumentationGenerator
                 'blob',
                 'enum' => 'string',
                 // -----------------------------
-                'boolean',
-                'tinyint' => 'bool',
+                'boolean' => 'bool',
                 // -----------------------------
                 default => config('model-doc.attributes.fallback_type') ?: 'mixed'
             };

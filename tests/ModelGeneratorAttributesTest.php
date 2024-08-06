@@ -19,8 +19,8 @@ class ModelGeneratorAttributesTest extends TestCase
             ' * @property int|null $column_integer_nullable',
             ' * @property string $column_string',
             ' * @property string|null $column_string_nullable',
-            ' * @property bool $column_boolean',
-            ' * @property bool|null $column_boolean_nullable',
+            ' * @property int $column_boolean',
+            ' * @property int|null $column_boolean_nullable',
             ' */',
         ], $doc);
     }

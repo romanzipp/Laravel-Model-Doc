@@ -14,5 +14,7 @@ class ModelBasicWithCasts extends EloquentModel
         'column_integer_nullable' => 'string',
         'column_string' => CastedType::class,
         'column_string_nullable' => '\romanzipp\ModelDoc\Tests\Support\Files\CastedType',
+        'column_boolean' => 'bool',
+        'column_boolean_nullable' => 'bool',
     ];
 }
