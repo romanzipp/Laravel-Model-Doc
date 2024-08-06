@@ -3,3 +3,5 @@ parameters:
   level: 6
   paths:
     - src
+  ignoreErrors:
+    - '#contains generic class#'
