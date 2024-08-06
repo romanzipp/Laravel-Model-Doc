@@ -57,6 +57,10 @@ return [
         ],
     ],
 
+    // Add generics to class declarations with generics like:
+    //   \Illuminate\Database\Eloquent\Builder<\App\Models\User>
+    'generics' => true,
+
     'tag_sorting' => [
         'see', 'author', 'property', 'property-read', 'property-write',
         'method', 'deprecated', 'since', 'version', 'var', 'type', 'param',
