@@ -20,8 +20,12 @@ return [
     'attributes' => [
         'enabled' => true,
 
-        // Use dbal class type if col type not mapped
-        'fallback_type' => false,
+        // Use specific type for database columns
+        // Type can be any valid PHP type or class name
+        // Supports custom column type mappings
+        'custom_mappings' => [
+            // 'my_type' => 'string',
+        ],
     ],
 
     // Generate properties for model accessors like `getTitleAttribute`
