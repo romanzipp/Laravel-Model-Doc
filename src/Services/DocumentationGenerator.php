@@ -568,6 +568,7 @@ class DocumentationGenerator
 
             if ($model->hasCast($name)) {
                 $castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])];
+
                 if ( ! empty(array_filter($castedTypes))) {
                     if (in_array('null', $types)) {
                         $castedTypes[] = 'null';
@@ -729,6 +730,15 @@ class DocumentationGenerator
             case 'immutable_datetime':
             case 'timestamp':
                 return '\\' . get_class(now());
+        }
+
+        // The cast type is a class name (most probably). Maybe check with class_exists()?
+        if (Str::contains($castType, '\\')) {
+            if ( ! Str::startsWith($castType, '\\')) {
+                $castType = '\\' . $castType;
+            }
+
+            return $castType;
         }
 
         return null;
