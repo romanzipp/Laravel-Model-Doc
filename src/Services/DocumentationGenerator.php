@@ -87,7 +87,13 @@ class DocumentationGenerator
 
         if ($mixinClasses = config('model-doc.custom_tags.mixins')) {
             foreach ($mixinClasses as $mixinClass) {
-                $tags[] = new MixinTag($mixinClass);
+                $mixinTag = new MixinTag($mixinClass);
+
+                if (config('model-doc.generics')) {
+                    $mixinTag->setModelForGenerics($model);
+                }
+
+                $tags[] = $mixinTag;
             }
         }
 
