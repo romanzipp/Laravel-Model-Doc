@@ -558,6 +558,7 @@ class DocumentationGenerator
             $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
 
             $tableColumns = array_map(function ($colName) use ($schemaBuilder, $model) {
+                /** @phpstan-ignore-next-line */
                 $docCol = $schemaBuilder->getConnection()->getDoctrineColumn($model->getTable(), $colName);
 
                 return [
