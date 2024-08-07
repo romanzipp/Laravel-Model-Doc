@@ -559,7 +559,7 @@ class DocumentationGenerator
 
             $tableColumns = array_map(static fn ($colName) => [
                 'name' => $colName,
-                'type' => $schemaBuilder->getColumnType($model->getTable(), $colName),
+                'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
                 'comment' => null,
             ], $tableColumnNames);
         }
