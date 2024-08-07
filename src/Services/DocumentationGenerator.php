@@ -557,11 +557,16 @@ class DocumentationGenerator
         } else {
             $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
 
-            $tableColumns = array_map(static fn ($colName) => [
-                'name' => $colName,
-                'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
-                'comment' => null,
-            ], $tableColumnNames);
+            $tableColumns = array_map(function ($colName) use ($schemaBuilder, $model) {
+                $docCol = $schemaBuilder->getConnection()->getDoctrineColumn($model->getTable(), $colName);
+
+                return [
+                    'name' => $colName,
+                    'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
+                    'nullable' => ! $docCol->getNotnull(),
+                    'comment' => null,
+                ];
+            }, $tableColumnNames);
         }
 
         foreach ($tableColumns as $tableColumn) {
