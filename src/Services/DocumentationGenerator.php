@@ -552,7 +552,17 @@ class DocumentationGenerator
 
         $schemaBuilder = $connection->getSchemaBuilder();
 
-        $tableColumns = $schemaBuilder->getColumns($model->getTable());
+        if (method_exists($schemaBuilder, 'getColumns')) {
+            $tableColumns = $schemaBuilder->getColumns($model->getTable());
+        } else {
+            $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
+
+            $tableColumns = array_map(static fn ($colName) => [
+                'name' => $colName,
+                'type' => $schemaBuilder->getColumnType($model->getTable(), $colName),
+                'comment' => null,
+            ], $tableColumnNames);
+        }
 
         foreach ($tableColumns as $tableColumn) {
             $name = $tableColumn['name'];
