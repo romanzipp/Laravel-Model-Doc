@@ -552,7 +552,23 @@ class DocumentationGenerator
 
         $schemaBuilder = $connection->getSchemaBuilder();
 
-        $tableColumns = $schemaBuilder->getColumns($model->getTable());
+        if (method_exists($schemaBuilder, 'getColumns')) {
+            $tableColumns = $schemaBuilder->getColumns($model->getTable());
+        } else {
+            $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
+
+            $tableColumns = array_map(function ($colName) use ($schemaBuilder, $model) {
+                /** @phpstan-ignore-next-line */
+                $docCol = $schemaBuilder->getConnection()->getDoctrineColumn($model->getTable(), $colName);
+
+                return [
+                    'name' => $colName,
+                    'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
+                    'nullable' => ! $docCol->getNotnull(),
+                    'comment' => null,
+                ];
+            }, $tableColumnNames);
+        }
 
         foreach ($tableColumns as $tableColumn) {
             $name = $tableColumn['name'];
