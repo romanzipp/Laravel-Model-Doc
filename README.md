@@ -20,6 +20,14 @@ Generate PHPDoc comments for Laravel Models including [**database columns**](htt
 composer require romanzipp/laravel-model-doc --dev
 ```
 
+#### Laravel <= 10
+
+If you use a Laravel version lower than 11, you also need to install the `doctrine/dbal` package:
+
+```shell
+composer require doctrine/dbal:^3.0 --dev
+```
+
 ## Configuration
 
 Copy configuration to config folder:
