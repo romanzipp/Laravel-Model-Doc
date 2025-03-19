@@ -660,7 +660,7 @@ class DocumentationGenerator
                 // -----------------------------
                 'boolean' => 'bool',
                 // -----------------------------
-                default => config('model-doc.attributes.fallback_type') ?: 'mixed'
+                default => config('model-doc.attributes.fallback_type') ?: 'mixed',
             };
         }
 
