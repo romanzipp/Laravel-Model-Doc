@@ -2,12 +2,12 @@
 
 namespace romanzipp\ModelDoc\Services\Tags;
 
-use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use phpowermove\docblock\tags\AbstractDescriptionTag;
+use romanzipp\ModelDoc\Services\Objects\Model;
 
 class MixinTag extends AbstractDescriptionTag
 {
-    private IlluminateModel $model;
+    private Model $model;
 
     /**
      * {@inheritdoc}
@@ -23,14 +23,14 @@ class MixinTag extends AbstractDescriptionTag
             $content = "\\$content";
         }
 
-        if (isset($this->model)) {
-            $content .= sprintf('<%s>', get_class($this->model));
+        if (isset($this->model) && null !== $this->model->getInstance()) {
+            $content .= sprintf('<%s>', get_class($this->model->getInstance()));
         }
 
         $this->setDescription($content);
     }
 
-    public function setModelForGenerics(IlluminateModel $model): void
+    public function setModelForGenerics(Model $model): void
     {
         $this->model = $model;
     }
