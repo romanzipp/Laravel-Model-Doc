@@ -18,6 +18,7 @@
         "phpowermove/docblock": "^4.0"
     },
     "require-dev": {
+        "doctrine/dbal": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.0",
         "orchestra/testbench": "^8.0|^9.0",
         "phpstan/phpstan": "^1.0",
