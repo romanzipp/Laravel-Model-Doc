@@ -95,6 +95,54 @@ final class PlacementTest extends TestCase
         self::restore('ModelWithExistingPhpDocAndAttribute');
     }
 
+    public function testGenerateForModelWithExistingPhpDocAndAttributeMultiline()
+    {
+        config([
+            'model-doc.relations.enabled' => true,
+            'model-doc.relations.counts.enabled' => true,
+        ]);
+
+        self::backup('ModelWithExistingPhpDocAndAttributeMultiline');
+
+        (new DocumentationGenerator())->generate(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelWithExistingPhpDocAndAttributeMultiline.php')
+        ));
+
+        $contents = explode(
+            PHP_EOL,
+            file_get_contents(__DIR__ . '/Support/ModelWithExistingPhpDocAndAttributeMultiline.php')
+        );
+
+        self::assertSame([
+            '<?php',
+            '',
+            'namespace romanzipp\ModelDoc\Tests\Support;',
+            '',
+            'use Illuminate\Database\Eloquent\Model as EloquentModel;',
+            'use romanzipp\ModelDoc\Tests\Support\Attributes\TestAttribute;',
+            '',
+            '/**',
+            ' * @property int $column_integer',
+            ' * @property int|null $column_integer_nullable',
+            ' * @property string $column_string',
+            ' * @property string|null $column_string_nullable',
+            ' * @property int $column_boolean',
+            ' * @property int|null $column_boolean_nullable',
+            ' */',
+            '#[',
+            '    TestAttribute,',
+            '    TestAttribute,',
+            ']',
+            'class ModelWithExistingPhpDocAndAttributeMultiline extends EloquentModel',
+            '{',
+            '    protected $table = \'table_one\';',
+            '}',
+            '',
+        ], $contents);
+
+        self::restore('ModelWithExistingPhpDocAndAttributeMultiline');
+    }
+
     private static function backup(string $modelName): void
     {
         @unlink(__DIR__ . '/Support/_' . $modelName . '.php');

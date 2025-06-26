@@ -483,7 +483,7 @@ class DocumentationGenerator
 
         $content = file_get_contents($reflectionClass->getFileName());
 
-        $lineIndexClassDeclaration = null;
+        $startLineIndex = null;
 
         $lines = explode(PHP_EOL, $content);
 
@@ -492,22 +492,54 @@ class DocumentationGenerator
                 continue;
             }
 
-            $lineIndexClassDeclaration = $index;
+            $startLineIndex = $index;
             break;
         }
 
-        if (null === $lineIndexClassDeclaration) {
+        if (null === $startLineIndex) {
             throw new ModelDocumentationFailedException('Can not find class declaration');
         }
 
         // Check if class declaration preceeds Attribute(s)
 
-        // TODO: implement
+        $isAttributeStarting = false;
+        $attributeLines = [];
+        $startLineIndexByAttribute = null;
+
+        for ($i = 0; $i <= $startLineIndex; ++$i) {
+            $line = $lines[$i];
+
+            $trimmedLine = trim($line);
+
+            $isBlank = '' === $trimmedLine;
+            $isComment = str_starts_with($trimmedLine, '*/') || str_starts_with($trimmedLine, '/**') || str_starts_with($trimmedLine, '*');
+
+            $isAttributeStarting = $isAttributeStarting || str_starts_with($trimmedLine, '#[');
+            $isAttributeEnding = str_ends_with($trimmedLine, ']');
+
+            if ($isAttributeStarting && null === $startLineIndexByAttribute) {
+                $startLineIndexByAttribute = $i;
+            }
+
+            if ($isAttributeStarting) {
+                $attributeLines[] = $line;
+            }
+
+            // dump('comment: '.($isComment?'y':'n'). ', blank: '.($isBlank?'y':'n').'   '. $line);
+
+            // Stop if attribute is single line or multiline declaration ends
+            if (($isAttributeStarting && $isAttributeEnding) || ($isAttributeEnding && count($attributeLines) > 1)) {
+                $startLineIndex = $i;
+                break;
+            }
+        }
+
+        $startLineIndex = $startLineIndexByAttribute ?? $startLineIndex;
 
         // Remove existing phpdoc
 
         foreach ($lines as $index => $line) {
-            if ($index >= $lineIndexClassDeclaration) {
+            if ($index >= $startLineIndex) {
                 break;
             }
 
@@ -521,7 +553,7 @@ class DocumentationGenerator
         $docLines = explode(PHP_EOL, $docblock->toString());
 
         foreach (array_reverse($docLines) as $docLine) {
-            array_splice($lines, $lineIndexClassDeclaration, 0, $docLine);
+            array_splice($lines, $startLineIndex, 0, $docLine);
         }
 
         $lines = array_filter($lines, static fn ($line) => null !== $line);
