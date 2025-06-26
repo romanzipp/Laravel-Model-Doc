@@ -488,7 +488,7 @@ class DocumentationGenerator
         $lines = explode(PHP_EOL, $content);
 
         foreach ($lines as $index => $line) {
-            if ( ! preg_match('/^(abstract|final)? ?class ([A-z]+)/', $line)) {
+            if ( ! preg_match('/^(abstract|final|readonly)? ?class ([A-z]+)/', $line)) {
                 continue;
             }
 
@@ -499,6 +499,10 @@ class DocumentationGenerator
         if (null === $lineIndexClassDeclaration) {
             throw new ModelDocumentationFailedException('Can not find class declaration');
         }
+
+        // Check if class declaration preceeds Attribute(s)
+
+        // TODO: implement
 
         // Remove existing phpdoc
 
