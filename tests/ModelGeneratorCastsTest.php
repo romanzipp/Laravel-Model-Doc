@@ -22,7 +22,7 @@ class ModelGeneratorCastsTest extends TestCase
             ' * @property int $column_integer',
             ' * @property int|null $column_integer_nullable',
             ' * @property \romanzipp\ModelDoc\Tests\Support\Casts\SomeType $column_string',
-            ' * @property string|null $column_string_nullable',
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Casts\SomeType|null $column_string_nullable',
             ' * @property int $column_boolean',
             ' * @property int|null $column_boolean_nullable',
             ' */',

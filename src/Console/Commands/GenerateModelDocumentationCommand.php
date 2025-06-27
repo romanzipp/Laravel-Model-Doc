@@ -10,8 +10,12 @@ class GenerateModelDocumentationCommand extends Command
 {
     protected $signature = 'model-doc:generate {--v}';
 
-    public function handle(DocumentationGenerator $generator): void
+    public function handle(): void
     {
+        $generator = new DocumentationGenerator(
+            output: $this->output
+        );
+
         $models = $generator->collectModels();
 
         foreach ($models as $model) {

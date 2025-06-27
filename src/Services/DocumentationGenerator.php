@@ -28,7 +28,7 @@ class DocumentationGenerator
     public static $pathCallback;
 
     public function __construct(
-        private ?OutputStyle $output = null,
+        private readonly ?OutputStyle $output = null,
     ) {
     }
 
@@ -148,10 +148,14 @@ class DocumentationGenerator
                     /** @var Relations\Relation $relation */
                     $relation = $instance->{$reflectionMethod->getName()}();
 
-                    foreach ($this->getPropertiesForRelation($reflectionMethod, $relation) as $property) {
+                    foreach ($this->getPropertiesForRelation($model, $reflectionMethod, $relation) as $property) {
                         $tags[] = $property;
                     }
+                } catch (\ArgumentCountError $exception) {
+                    $this->output?->warning(sprintf('Could not analyze relation `%s` because it has non-default arguments', $reflectionMethod->getName()));
                 } catch (\Throwable $exception) {
+                    $this->output?->warning(sprintf('Caught %s error: %s', get_class($exception), $exception->getMessage()));
+
                     continue; // thanks spatie :-)
                 }
             }
@@ -421,7 +425,7 @@ class DocumentationGenerator
      *
      * @return \phpowermove\docblock\tags\PropertyReadTag[]
      */
-    private function getPropertiesForRelation(\ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
+    private function getPropertiesForRelation(Model $model, \ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
     {
         $related = $relation->getRelated();
         $relatedClass = get_class($related);
@@ -445,15 +449,44 @@ class DocumentationGenerator
             $relatedClass = config('model-doc.relations.base_model') ?? IlluminateModel::class;
         }
 
-        $propertyReturns = $isMany
-            ? [
+        $isNullable = true;
+
+        // Get information about the foreign key and check if nullable
+        if ($relation instanceof Relations\BelongsTo) {
+            $isNullable = null;
+            $columnName = $relation->getForeignKeyName();
+
+            $tableColumns = self::getTableColumnsForModel($model->getInstance());
+
+            foreach ($tableColumns as $tableColumn) {
+                if ($tableColumn['name'] === $columnName) {
+                    $isNullable = $tableColumn['nullable'];
+
+                    break;
+                }
+            }
+
+            if (null === $isNullable) {
+                $this->output?->warning(sprintf('Could not determine if relation key column `%s` is nullable', $columnName));
+
+                $isNullable = true;
+            }
+        }
+
+        if ($isMany) {
+            $propertyReturns = [
                 self::makeAbsoluteClassName(Collection::class),
                 self::makeAbsoluteClassName($relatedClass) . '[]',
-            ]
-            : [
-                self::makeAbsoluteClassName($relatedClass),
-                'null',
             ];
+        } else {
+            $propertyReturns = [
+                self::makeAbsoluteClassName($relatedClass),
+            ];
+
+            if ($isNullable) {
+                $propertyReturns[] = 'null';
+            }
+        }
 
         $relationProperty = new PropertyReadTag();
         $relationProperty->setVariable("\${$reflectionMethod->getName()}");
@@ -461,6 +494,7 @@ class DocumentationGenerator
             implode('|', $propertyReturns)
         );
 
+        // Return if no `*_count` readonly property should be added
         if (false === config('model-doc.relations.counts.enabled')) {
             return [$relationProperty];
         }
@@ -595,27 +629,7 @@ class DocumentationGenerator
             return false;
         };
 
-        $connection = $model->getConnection();
-
-        $schemaBuilder = $connection->getSchemaBuilder();
-
-        if (method_exists($schemaBuilder, 'getColumns')) {
-            $tableColumns = $schemaBuilder->getColumns($model->getTable());
-        } else {
-            $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
-
-            $tableColumns = array_map(function ($colName) use ($schemaBuilder, $model) {
-                /** @phpstan-ignore-next-line */
-                $docCol = $schemaBuilder->getConnection()->getDoctrineColumn($model->getTable(), $colName);
-
-                return [
-                    'name' => $colName,
-                    'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
-                    'nullable' => ! $docCol->getNotnull(),
-                    'comment' => null,
-                ];
-            }, $tableColumnNames);
-        }
+        $tableColumns = $this->getTableColumnsForModel($model);
 
         foreach ($tableColumns as $tableColumn) {
             $name = $tableColumn['name'];
@@ -631,7 +645,7 @@ class DocumentationGenerator
             $types = $this->getTypesForTableColumn($model, $tableColumn);
 
             if ($model->hasCast($name)) {
-                $castedTypes = [$this->getReturnTypeForCast($model->getCasts()[$name], $name)];
+                $castedTypes = $this->getReturnTypesForCast($model->getCasts()[$name], $name);
 
                 if ( ! empty(array_filter($castedTypes))) {
                     if (in_array('null', $types)) {
@@ -654,6 +668,37 @@ class DocumentationGenerator
 
             yield $property;
         }
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
+     * @return array{name: string, type_name: string, nullable: bool, comment: string|null}[]
+     */
+    private static function getTableColumnsForModel(IlluminateModel $model): array
+    {
+        $connection = $model->getConnection();
+        $schemaBuilder = $connection->getSchemaBuilder();
+
+        if (method_exists($schemaBuilder, 'getColumns')) {
+            $tableColumns = $schemaBuilder->getColumns($model->getTable());
+        } else {
+            $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
+
+            $tableColumns = array_map(function ($colName) use ($schemaBuilder, $model) {
+                /** @phpstan-ignore-next-line */
+                $docCol = $schemaBuilder->getConnection()->getDoctrineColumn($model->getTable(), $colName);
+
+                return [
+                    'name' => $colName,
+                    'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
+                    'nullable' => ! $docCol->getNotnull(),
+                    'comment' => null,
+                ];
+            }, $tableColumnNames);
+        }
+
+        return $tableColumns;
     }
 
     /**
@@ -698,13 +743,15 @@ class DocumentationGenerator
         }
 
         if (empty($types)) {
-            $types[] = match ($column['type_name'] ?? null) {
+            $detectedType = match ($column['type_name'] ?? null) {
                 'int',
+                'int4',
                 'integer',
                 'mediumint',
                 'bigint',
                 'smallint',
                 'tinyint',
+                'numeric',
                 'year' => 'int',
                 // -----------------------------
                 'float',
@@ -724,12 +771,22 @@ class DocumentationGenerator
                 'time',
                 'timestamp',
                 'blob',
+                'uuid',
                 'enum' => 'string',
                 // -----------------------------
+                'bool',
                 'boolean' => 'bool',
                 // -----------------------------
-                default => config('model-doc.attributes.fallback_type') ?: 'mixed',
+                default => null,
             };
+
+            if (null === $detectedType) {
+                $this->output?->warning(sprintf('Could not derive column type from type-name `%s` for column `%s`', $column['type_name'], $column['name']));
+
+                $detectedType = config('model-doc.attributes.fallback_type') ?: 'mixed';
+            }
+
+            $types[] = $detectedType;
         }
 
         if ($column['nullable'] ?? false) {
@@ -764,33 +821,34 @@ class DocumentationGenerator
      * @param string $castType
      * @param string $tableColumn
      *
-     * @return string|null
+     * @return array<string>
      *
      * @internal
      */
-    public function getReturnTypeForCast(string $castType, string $tableColumn): ?string
+    public function getReturnTypesForCast(string $castType, string $tableColumn): array
     {
         switch ($castType) {
             case 'int':
             case 'integer':
-                return 'int';
+                return ['int'];
             case 'real':
             case 'float':
             case 'double':
             case 'decimal':
-                return 'float';
+                return ['float'];
             case 'string':
-                return 'string';
+            case 'hashed':
+                return ['string'];
             case 'bool':
             case 'boolean':
-                return 'bool';
+                return ['bool'];
             case 'object':
-                return '\stdClass';
+                return ['\stdClass'];
             case 'array':
             case 'json':
-                return 'array';
+                return ['array'];
             case 'collection':
-                return '\\' . \Illuminate\Support\Collection::class;
+                return ['\\' . \Illuminate\Support\Collection::class];
             case 'date':
             case 'datetime':
             case 'custom_datetime':
@@ -798,41 +856,60 @@ class DocumentationGenerator
             case 'immutable_custom_datetime':
             case 'immutable_datetime':
             case 'timestamp':
-                return '\\' . get_class(now());
+                return ['\\' . get_class(now())];
         }
 
         if ( ! str_contains($castType, '\\')) {
             // The cast is an unknown type
-            $this->output->warning(sprintf('Unknown cast type `%s` for column `%s`', $castType, $tableColumn));
+            $this->output?->warning(sprintf('Unknown cast type `%s` for column `%s`', $castType, $tableColumn));
 
-            return null;
+            return [];
         }
+
+        $defaultType = self::makeAbsoluteClassName($castType);
 
         // Check if cast is a `Illuminate\Contracts\Database\Eloquent\CastsAttributes` caster
         try {
-            $castInstance = new $castType();
+            $castReflection = new \ReflectionClass($castType);
 
-            if ( ! ($castInstance instanceof CastsAttributes)) {
-                return self::makeAbsoluteClassName($castType);
+            if ( ! $castReflection->isInstantiable()) {
+                return [$defaultType];
             }
 
-            $castReflection = new \ReflectionClass($castInstance);
+            $castInstance = $castReflection->newInstance();
+
+            if ( ! ($castInstance instanceof CastsAttributes)) {
+                return [self::makeAbsoluteClassName($castType)];
+            }
 
             $getMethod = $castReflection->getMethod('get');
 
-            $type = $getMethod->getReturnType();
+            $returnTypes = $getMethod->getReturnType();
 
-            if (null === $type) {
-                throw new ModelDocumentationFailedException(sprintf('The `get()` method of the cast `%s` does not have a return type declared', $castType));
+            if ($returnTypes instanceof \ReflectionNamedType) {
+                return [
+                    $returnTypes->isBuiltin()
+                        ? $returnTypes->getName()
+                        : self::makeAbsoluteClassName($returnTypes->getName()),
+                ];
             }
 
-            return self::makeAbsoluteClassName($type);
+            if ($returnTypes instanceof \ReflectionUnionType) {
+                return array_map(
+                    fn (\ReflectionNamedType $type) => $type->isBuiltin()
+                        ? $type->getName()
+                        : self::makeAbsoluteClassName($type->getName()),
+                    $returnTypes->getTypes()
+                );
+            }
+
+            return [$defaultType];
         } catch (\ReflectionException $exception) {
             $this->output?->warning(sprintf('Could not instanziate cast class `%s` for column `%s`', $castType, $tableColumn));
         }
 
         // The cast type is a class name (most probably). Maybe check with class_exists()?
-        return self::makeAbsoluteClassName($castType);
+        return [$defaultType];
     }
 
     /**
@@ -873,8 +950,21 @@ class DocumentationGenerator
 
     private static function makeAbsoluteClassName(string $class): string
     {
-        return str_starts_with($class, '\\')
-            ? $class
-            : "\\{$class}";
+        $nullable = false;
+
+        if (str_starts_with($class, '?')) {
+            $class = substr($class, 1, null);
+            $nullable = true;
+        }
+
+        if ( ! str_starts_with($class, '\\')) {
+            $class = "\\{$class}";
+        }
+
+        if ($nullable) {
+            $class = "?{$class}";
+        }
+
+        return $class;
     }
 }
