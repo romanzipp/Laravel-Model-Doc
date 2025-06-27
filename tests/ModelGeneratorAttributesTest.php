@@ -9,7 +9,7 @@ class ModelGeneratorAttributesTest extends TestCase
 {
     public function testBasicAttributes()
     {
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelBasic.php')
         ));
 
@@ -27,7 +27,7 @@ class ModelGeneratorAttributesTest extends TestCase
 
     public function testExtendedAttributes()
     {
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelExtended.php')
         ));
 
@@ -61,7 +61,7 @@ class ModelGeneratorAttributesTest extends TestCase
             'model-doc.attributes.enabled' => false,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelBasic.php')
         ));
 
@@ -73,7 +73,7 @@ class ModelGeneratorAttributesTest extends TestCase
 
     public function testAttributesCasted()
     {
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelBasicWithCasts.php')
         ));
 
@@ -91,7 +91,7 @@ class ModelGeneratorAttributesTest extends TestCase
 
     public function testSpecialModelTypes()
     {
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelSpecialAttributes.php')
         ));
 

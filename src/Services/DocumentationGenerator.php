@@ -2,6 +2,7 @@
 
 namespace romanzipp\ModelDoc\Services;
 
+use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,6 +26,11 @@ class DocumentationGenerator
      * @var callable|null
      */
     public static $pathCallback;
+
+    public function __construct(
+        private ?OutputStyle $output = null,
+    ) {
+    }
 
     public static function usePath(callable $pathCallback): void
     {
@@ -625,7 +631,7 @@ class DocumentationGenerator
             $types = $this->getTypesForTableColumn($model, $tableColumn);
 
             if ($model->hasCast($name)) {
-                $castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])];
+                $castedTypes = [$this->getReturnTypeForCast($model->getCasts()[$name], $name)];
 
                 if ( ! empty(array_filter($castedTypes))) {
                     if (in_array('null', $types)) {
@@ -672,7 +678,11 @@ class DocumentationGenerator
                 try {
                     $class = new \ReflectionClass($state->first());
                 } catch (\ReflectionException $exception) {
-                    throw new ModelDocumentationFailedException(message: sprintf('Failed get type for database column `%s` on table `%s`: %s', $column['name'], $model->getTable(), $exception->getMessage()), previous: $exception);
+                    $this->output?->warning(
+                        sprintf('Failed to get type for database column `%s` on table `%s`: %s', $column['name'], $model->getTable(), $exception->getMessage()),
+                    );
+
+                    continue;
                 }
 
                 $types[] = self::makeAbsoluteClassName($class->getParentClass()->getName());
@@ -752,12 +762,13 @@ class DocumentationGenerator
 
     /**
      * @param string $castType
+     * @param string $tableColumn
      *
      * @return string|null
      *
      * @internal
      */
-    public static function getReturnTypeForCast(string $castType): ?string
+    public function getReturnTypeForCast(string $castType, string $tableColumn): ?string
     {
         switch ($castType) {
             case 'int':
@@ -792,6 +803,8 @@ class DocumentationGenerator
 
         if ( ! str_contains($castType, '\\')) {
             // The cast is an unknown type
+            $this->output->warning(sprintf('Unknown cast type `%s` for column `%s`', $castType, $tableColumn));
+
             return null;
         }
 
@@ -815,11 +828,11 @@ class DocumentationGenerator
 
             return self::makeAbsoluteClassName($type);
         } catch (\ReflectionException $exception) {
-            // could not instnaciate
+            $this->output?->warning(sprintf('Could not instanziate cast class `%s` for column `%s`', $castType, $tableColumn));
         }
 
         // The cast type is a class name (most probably). Maybe check with class_exists()?
-        return $castType;
+        return self::makeAbsoluteClassName($castType);
     }
 
     /**

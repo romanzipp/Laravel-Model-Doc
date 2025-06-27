@@ -15,7 +15,7 @@ class ModelGeneratorRelationsTest extends TestCase
             'model-doc.relations.counts.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
 
@@ -45,7 +45,7 @@ class ModelGeneratorRelationsTest extends TestCase
             'model-doc.relations.counts.enabled' => false,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
 
@@ -74,7 +74,7 @@ class ModelGeneratorRelationsTest extends TestCase
             'model-doc.relations.counts.enabled' => false,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
 
@@ -94,7 +94,7 @@ class ModelGeneratorRelationsTest extends TestCase
             'model-doc.fail_when_empty' => true,
         ]);
 
-        (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelSimpleRelations.php')
         ));
     }
@@ -106,7 +106,7 @@ class ModelGeneratorRelationsTest extends TestCase
             'model-doc.relations.counts.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelPluralRelations.php')
         ));
 
@@ -128,7 +128,7 @@ class ModelGeneratorRelationsTest extends TestCase
             'model-doc.relations.counts.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelMorphRelations.php')
         ));
 
@@ -158,7 +158,7 @@ class ModelGeneratorRelationsTest extends TestCase
             'model-doc.relations.counts.enabled' => false,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelMorphRelations.php')
         ));
 
