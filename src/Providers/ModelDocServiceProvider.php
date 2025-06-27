@@ -2,13 +2,10 @@
 
 namespace romanzipp\ModelDoc\Providers;
 
-use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use romanzipp\ModelDoc\Console\Commands\GenerateModelDocumentationCommand;
 use romanzipp\ModelDoc\Services\DocumentationGenerator;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class ModelDocServiceProvider extends ServiceProvider
 {
@@ -42,12 +39,7 @@ class ModelDocServiceProvider extends ServiceProvider
 
         $this->app->singleton(DocumentationGenerator::class, function (Application $app) {
             return new DocumentationGenerator(
-                output: $app->make(
-                    OutputStyle::class, [
-                        'input' => $app->make(InputInterface::class),
-                        'output' => $app->make(OutputInterface::class),
-                    ]
-                )
+                output: null
             );
         });
     }
