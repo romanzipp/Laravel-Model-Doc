@@ -2,6 +2,7 @@
 
 namespace romanzipp\ModelDoc\Services;
 
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
@@ -67,6 +68,7 @@ class DocumentationGenerator
     public function generate(Model $model): void
     {
         $modelDoc = $this->generateModelDocBlock($model);
+
         if ( ! $modelDoc->isEmpty()) {
             $this->writeDoc($model, $modelDoc);
         }
@@ -439,11 +441,11 @@ class DocumentationGenerator
 
         $propertyReturns = $isMany
             ? [
-                '\\' . Collection::class,
-                '\\' . $relatedClass . '[]',
+                self::makeAbsoluteClassName(Collection::class),
+                self::makeAbsoluteClassName($relatedClass) . '[]',
             ]
             : [
-                '\\' . $relatedClass,
+                self::makeAbsoluteClassName($relatedClass),
                 'null',
             ];
 
@@ -511,9 +513,6 @@ class DocumentationGenerator
 
             $trimmedLine = trim($line);
 
-            $isBlank = '' === $trimmedLine;
-            $isComment = str_starts_with($trimmedLine, '*/') || str_starts_with($trimmedLine, '/**') || str_starts_with($trimmedLine, '*');
-
             $isAttributeStarting = $isAttributeStarting || str_starts_with($trimmedLine, '#[');
             $isAttributeEnding = str_ends_with($trimmedLine, ']');
 
@@ -571,13 +570,13 @@ class DocumentationGenerator
      */
     private function getModelAttributesProperties(\ReflectionClass $reflectionClass, IlluminateModel $model): \Generator
     {
-        /**
-         * @var \phpowermove\docblock\tags\PropertyTag[] $accessors
-         */
+        /** @var \phpowermove\docblock\tags\PropertyTag[] $accessors */
         $accessors = [];
 
         if (true === config('model-doc.accessors.enabled')) {
-            $accessors = iterator_to_array($this->getModelAccessors($reflectionClass));
+            $accessors = iterator_to_array(
+                $this->getModelAccessors($reflectionClass)
+            );
         }
 
         $hasAccessor = function (string $variable) use ($accessors) {
@@ -615,6 +614,7 @@ class DocumentationGenerator
         foreach ($tableColumns as $tableColumn) {
             $name = $tableColumn['name'];
 
+            // Skip
             if ($hasAccessor($name)) {
                 continue;
             }
@@ -672,18 +672,10 @@ class DocumentationGenerator
                 try {
                     $class = new \ReflectionClass($state->first());
                 } catch (\ReflectionException $exception) {
-                    throw new ModelDocumentationFailedException(
-                        message: sprintf(
-                            'Failed get type for database column `%s` on table `%s`: %s',
-                            $column['name'],
-                            $model->getTable(),
-                            $exception->getMessage(),
-                        ),
-                        previous: $exception
-                    );
+                    throw new ModelDocumentationFailedException(message: sprintf('Failed get type for database column `%s` on table `%s`: %s', $column['name'], $model->getTable(), $exception->getMessage()), previous: $exception);
                 }
 
-                $types[] = '\\' . $class->getParentClass()->getName();
+                $types[] = self::makeAbsoluteClassName($class->getParentClass()->getName());
             }
         }
 
@@ -692,7 +684,7 @@ class DocumentationGenerator
                 continue;
             }
 
-            $types[] = '\\' . get_class(now());
+            $types[] = self::makeAbsoluteClassName(get_class(now()));
         }
 
         if (empty($types)) {
@@ -798,16 +790,36 @@ class DocumentationGenerator
                 return '\\' . get_class(now());
         }
 
-        // The cast type is a class name (most probably). Maybe check with class_exists()?
-        if (Str::contains($castType, '\\')) {
-            if ( ! Str::startsWith($castType, '\\')) {
-                $castType = '\\' . $castType;
-            }
-
-            return $castType;
+        if ( ! str_contains($castType, '\\')) {
+            // The cast is an unknown type
+            return null;
         }
 
-        return null;
+        // Check if cast is a `Illuminate\Contracts\Database\Eloquent\CastsAttributes` caster
+        try {
+            $castInstance = new $castType();
+
+            if ( ! ($castInstance instanceof CastsAttributes)) {
+                return self::makeAbsoluteClassName($castType);
+            }
+
+            $castReflection = new \ReflectionClass($castInstance);
+
+            $getMethod = $castReflection->getMethod('get');
+
+            $type = $getMethod->getReturnType();
+
+            if (null === $type) {
+                throw new ModelDocumentationFailedException(sprintf('The `get()` method of the cast `%s` does not have a return type declared', $castType));
+            }
+
+            return self::makeAbsoluteClassName($type);
+        } catch (\ReflectionException $exception) {
+            // could not instnaciate
+        }
+
+        // The cast type is a class name (most probably). Maybe check with class_exists()?
+        return $castType;
     }
 
     /**
@@ -817,7 +829,7 @@ class DocumentationGenerator
      *
      * @return string
      */
-    private static function getDefaultValue($value): string
+    private static function getDefaultValue(mixed $value): string
     {
         if (null === $value) {
             return 'null';
@@ -844,5 +856,12 @@ class DocumentationGenerator
         }
 
         return strval($value);
+    }
+
+    private static function makeAbsoluteClassName(string $class): string
+    {
+        return str_starts_with($class, '\\')
+            ? $class
+            : "\\{$class}";
     }
 }
