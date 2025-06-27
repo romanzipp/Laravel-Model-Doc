@@ -672,7 +672,15 @@ class DocumentationGenerator
                 try {
                     $class = new \ReflectionClass($state->first());
                 } catch (\ReflectionException $exception) {
-                    throw new ModelDocumentationFailedException("Failed get type for database column {$column['name']} on table {$model->getTable()}", 0, $exception);
+                    throw new ModelDocumentationFailedException(
+                        message: sprintf(
+                            'Failed get type for database column `%s` on table `%s`: %s',
+                            $column['name'],
+                            $model->getTable(),
+                            $exception->getMessage(),
+                        ),
+                        previous: $exception
+                    );
                 }
 
                 $types[] = '\\' . $class->getParentClass()->getName();
