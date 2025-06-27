@@ -16,7 +16,7 @@ class ModelGeneratorFactoryTest extends TestCase
             'model-doc.factories.enabled' => false,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelFactoryBasic.php')
         ));
 
@@ -35,7 +35,7 @@ class ModelGeneratorFactoryTest extends TestCase
             'model-doc.factories.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelFactoryBasic.php')
         ));
 
@@ -55,7 +55,7 @@ class ModelGeneratorFactoryTest extends TestCase
             'model-doc.factories.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelFactoryBasic.php')
         ));
 

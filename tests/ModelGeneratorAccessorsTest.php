@@ -15,7 +15,7 @@ class ModelGeneratorAccessorsTest extends TestCase
             'model-doc.accessors.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelAccessors.php')
         ));
 
@@ -38,7 +38,7 @@ class ModelGeneratorAccessorsTest extends TestCase
             'model-doc.accessors.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelAccessorsDuplicateAttribute.php')
         ));
 
@@ -62,7 +62,7 @@ class ModelGeneratorAccessorsTest extends TestCase
             'model-doc.accessors.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelAttributeCast.php')
         ));
 

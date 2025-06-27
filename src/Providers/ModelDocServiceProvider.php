@@ -38,7 +38,9 @@ class ModelDocServiceProvider extends ServiceProvider
         ]);
 
         $this->app->singleton(DocumentationGenerator::class, function (Application $app) {
-            return new DocumentationGenerator();
+            return new DocumentationGenerator(
+                output: null
+            );
         });
     }
 

@@ -16,7 +16,7 @@ final class PlacementTest extends TestCase
 
         self::backup('ModelWithExistingPhpDoc');
 
-        (new DocumentationGenerator())->generate(new Model(
+        $this->app->make(DocumentationGenerator::class)->generate(new Model(
             $this->getFile(__DIR__ . '/Support/ModelWithExistingPhpDoc.php')
         ));
 
@@ -59,7 +59,7 @@ final class PlacementTest extends TestCase
 
         self::backup('ModelWithExistingPhpDocAndAttribute');
 
-        (new DocumentationGenerator())->generate(new Model(
+        $this->app->make(DocumentationGenerator::class)->generate(new Model(
             $this->getFile(__DIR__ . '/Support/ModelWithExistingPhpDocAndAttribute.php')
         ));
 
@@ -104,7 +104,7 @@ final class PlacementTest extends TestCase
 
         self::backup('ModelWithExistingPhpDocAndAttributeMultiline');
 
-        (new DocumentationGenerator())->generate(new Model(
+        $this->app->make(DocumentationGenerator::class)->generate(new Model(
             $this->getFile(__DIR__ . '/Support/ModelWithExistingPhpDocAndAttributeMultiline.php')
         ));
 
