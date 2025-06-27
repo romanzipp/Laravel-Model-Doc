@@ -5,4 +5,7 @@ return romanzipp\Fixer\Config::make()
     ->preset(
         new romanzipp\Fixer\Presets\PrettyLaravel()
     )
+    ->withRules([
+        'braces' => false,
+    ])
     ->out();

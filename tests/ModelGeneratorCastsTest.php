@@ -13,7 +13,7 @@ class ModelGeneratorCastsTest extends TestCase
             'model-doc.casts.enabled' => true,
         ]);
 
-        $doc = (new DocumentationGenerator())->generateModelDocBlock(new Model(
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
             $this->getFile(__DIR__ . '/Support/ModelCustomCast.php')
         ));
 
