@@ -87,7 +87,13 @@ class DocumentationGenerator
 
         if ($mixinClasses = config('model-doc.custom_tags.mixins')) {
             foreach ($mixinClasses as $mixinClass) {
-                $tags[] = new MixinTag($mixinClass);
+                $mixinTag = new MixinTag($mixinClass);
+
+                if (config('model-doc.generics')) {
+                    $mixinTag->setModelForGenerics($model);
+                }
+
+                $tags[] = $mixinTag;
             }
         }
 
@@ -477,27 +483,63 @@ class DocumentationGenerator
 
         $content = file_get_contents($reflectionClass->getFileName());
 
-        $lineIndexClassDeclaration = null;
+        $startLineIndex = null;
 
         $lines = explode(PHP_EOL, $content);
 
         foreach ($lines as $index => $line) {
-            if ( ! preg_match('/^(abstract|final)? ?class ([A-z]+)/', $line)) {
+            if ( ! preg_match('/^(abstract|final|readonly)? ?class ([A-z]+)/', $line)) {
                 continue;
             }
 
-            $lineIndexClassDeclaration = $index;
+            $startLineIndex = $index;
             break;
         }
 
-        if (null === $lineIndexClassDeclaration) {
+        if (null === $startLineIndex) {
             throw new ModelDocumentationFailedException('Can not find class declaration');
         }
+
+        // Check if class declaration preceeds Attribute(s)
+
+        $isAttributeStarting = false;
+        $attributeLines = [];
+        $startLineIndexByAttribute = null;
+
+        for ($i = 0; $i <= $startLineIndex; ++$i) {
+            $line = $lines[$i];
+
+            $trimmedLine = trim($line);
+
+            $isBlank = '' === $trimmedLine;
+            $isComment = str_starts_with($trimmedLine, '*/') || str_starts_with($trimmedLine, '/**') || str_starts_with($trimmedLine, '*');
+
+            $isAttributeStarting = $isAttributeStarting || str_starts_with($trimmedLine, '#[');
+            $isAttributeEnding = str_ends_with($trimmedLine, ']');
+
+            if ($isAttributeStarting && null === $startLineIndexByAttribute) {
+                $startLineIndexByAttribute = $i;
+            }
+
+            if ($isAttributeStarting) {
+                $attributeLines[] = $line;
+            }
+
+            // dump('comment: '.($isComment?'y':'n'). ', blank: '.($isBlank?'y':'n').'   '. $line);
+
+            // Stop if attribute is single line or multiline declaration ends
+            if (($isAttributeStarting && $isAttributeEnding) || ($isAttributeEnding && count($attributeLines) > 1)) {
+                $startLineIndex = $i;
+                break;
+            }
+        }
+
+        $startLineIndex = $startLineIndexByAttribute ?? $startLineIndex;
 
         // Remove existing phpdoc
 
         foreach ($lines as $index => $line) {
-            if ($index >= $lineIndexClassDeclaration) {
+            if ($index >= $startLineIndex) {
                 break;
             }
 
@@ -511,7 +553,7 @@ class DocumentationGenerator
         $docLines = explode(PHP_EOL, $docblock->toString());
 
         foreach (array_reverse($docLines) as $docLine) {
-            array_splice($lines, $lineIndexClassDeclaration, 0, $docLine);
+            array_splice($lines, $startLineIndex, 0, $docLine);
         }
 
         $lines = array_filter($lines, static fn ($line) => null !== $line);
@@ -552,7 +594,23 @@ class DocumentationGenerator
 
         $schemaBuilder = $connection->getSchemaBuilder();
 
-        $tableColumns = $schemaBuilder->getColumns($model->getTable());
+        if (method_exists($schemaBuilder, 'getColumns')) {
+            $tableColumns = $schemaBuilder->getColumns($model->getTable());
+        } else {
+            $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
+
+            $tableColumns = array_map(function ($colName) use ($schemaBuilder, $model) {
+                /** @phpstan-ignore-next-line */
+                $docCol = $schemaBuilder->getConnection()->getDoctrineColumn($model->getTable(), $colName);
+
+                return [
+                    'name' => $colName,
+                    'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
+                    'nullable' => ! $docCol->getNotnull(),
+                    'comment' => null,
+                ];
+            }, $tableColumnNames);
+        }
 
         foreach ($tableColumns as $tableColumn) {
             $name = $tableColumn['name'];
@@ -568,6 +626,7 @@ class DocumentationGenerator
 
             if ($model->hasCast($name)) {
                 $castedTypes = [self::getReturnTypeForCast($model->getCasts()[$name])];
+
                 if ( ! empty(array_filter($castedTypes))) {
                     if (in_array('null', $types)) {
                         $castedTypes[] = 'null';
@@ -645,6 +704,7 @@ class DocumentationGenerator
                 'mediumint',
                 'bigint',
                 'smallint',
+                'tinyint',
                 'year' => 'int',
                 // -----------------------------
                 'float',
@@ -667,11 +727,11 @@ class DocumentationGenerator
                 'blob',
                 'enum' => 'string',
                 // -----------------------------
-                'boolean',
+                'boolean' => 'bool',
                 'bit',
                 'tinyint' => 'bool',
                 // -----------------------------
-                default => 'mixed'
+                default => config('model-doc.attributes.fallback_type') ?: 'mixed',
             };
         }
 
@@ -741,6 +801,15 @@ class DocumentationGenerator
             case 'immutable_datetime':
             case 'timestamp':
                 return '\\' . get_class(now());
+        }
+
+        // The cast type is a class name (most probably). Maybe check with class_exists()?
+        if (Str::contains($castType, '\\')) {
+            if ( ! Str::startsWith($castType, '\\')) {
+                $castType = '\\' . $castType;
+            }
+
+            return $castType;
         }
 
         return null;

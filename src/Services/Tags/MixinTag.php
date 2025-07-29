@@ -3,9 +3,12 @@
 namespace romanzipp\ModelDoc\Services\Tags;
 
 use phpowermove\docblock\tags\AbstractDescriptionTag;
+use romanzipp\ModelDoc\Services\Objects\Model;
 
 class MixinTag extends AbstractDescriptionTag
 {
+    private Model $model;
+
     /**
      * {@inheritdoc}
      */
@@ -20,7 +23,16 @@ class MixinTag extends AbstractDescriptionTag
             $content = "\\$content";
         }
 
+        if (isset($this->model) && null !== $this->model->getInstance()) {
+            $content .= sprintf('<%s>', get_class($this->model->getInstance()));
+        }
+
         $this->setDescription($content);
+    }
+
+    public function setModelForGenerics(Model $model): void
+    {
+        $this->model = $model;
     }
 
     public function toString(): string

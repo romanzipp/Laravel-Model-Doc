@@ -13,7 +13,7 @@ return [
         ],
 
         // Base model class to be used for MorphTo relation return type
-        'base_model' => Illuminate\Database\Eloquent\Model::class,
+        'base_model' => \Illuminate\Database\Eloquent\Model::class,
     ],
 
     // Generate PHPDoc properties for database columns
@@ -60,6 +60,10 @@ return [
             // \Illuminate\Database\Eloquent\Model::class,
         ],
     ],
+
+    // Add generics to class declarations with generics like:
+    //   \Illuminate\Database\Eloquent\Builder<\App\Models\User>
+    'generics' => true,
 
     'tag_sorting' => [
         'see', 'author', 'property', 'property-read', 'property-write',

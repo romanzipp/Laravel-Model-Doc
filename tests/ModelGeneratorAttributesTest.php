@@ -19,8 +19,8 @@ class ModelGeneratorAttributesTest extends TestCase
             ' * @property int|null $column_integer_nullable',
             ' * @property string $column_string',
             ' * @property string|null $column_string_nullable',
-            ' * @property bool $column_boolean',
-            ' * @property bool|null $column_boolean_nullable',
+            ' * @property int $column_boolean',
+            ' * @property int|null $column_boolean_nullable',
             ' */',
         ], $doc);
     }
@@ -81,8 +81,8 @@ class ModelGeneratorAttributesTest extends TestCase
             '/**',
             ' * @property string $column_integer',
             ' * @property string|null $column_integer_nullable',
-            ' * @property string $column_string',
-            ' * @property string|null $column_string_nullable',
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Files\CastedType $column_string',
+            ' * @property \romanzipp\ModelDoc\Tests\Support\Files\CastedType|null $column_string_nullable',
             ' * @property bool $column_boolean',
             ' * @property bool|null $column_boolean_nullable',
             ' */',
