@@ -831,6 +831,10 @@ class DocumentationGenerator
      */
     public function getReturnTypesForCast(string $castType, string $tableColumn): array
     {
+        if (str_starts_with($castType, 'datetime:')) {
+            return ['\\' . now()::class];
+        }
+
         switch ($castType) {
             case 'int':
             case 'integer':
