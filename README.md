@@ -156,15 +156,19 @@ php artisan model-doc:generate --v
 
 ### Custom database types
 
-If (in verbose mode) you get an error like `Unknown database type enum requested`, you can add that custom type mapping in Laravel's `database.php` config file. Laravel uses the [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html) package for database types. You can find a list of supported types [here](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html#mapping-matrix).
-Laravel provides an example for `timestamp` type mapping [here](https://laravel.com/docs/10.x/migrations#modifying-columns-on-sqlite).
+In older Laravel versions, `database.php` config file contained `dbal` section with `types` key, which allowed to define custom database types. Starting Laravel 11, that section was removed and Laravel can retrieve custom database types from the database itself as string.
 
-Here is an example for `enum` type mapping in `database.php` config file:
+This package uses the same approach and maps database types to PHP types as defined in [DocumentationGenerator.php](src/Services/DocumentationGenerator.php#L640). All unknown database types are treated as `mixed` by default. If you are using custom database types or want to map them to specific PHP types, you can add custom type mappings to the `model-doc.php` config file. You can either use a class name, string representation of PHP native type or a combination of both. `null` type will be added automatically if the column is nullable, so you don't need to add it manually here.
+
+Here are some examples:
 
 ```php
-'dbal' => [
-    'types' => [
-        'enum' => Doctrine\DBAL\Types\StringType::class,
+'attributes' => [
+    'custom_mappings' => [
+        'my_type' => 'int',
+        'my_other_type' => 'string|int',
+        'my_class_type' => \Illuminate\Support\Carbon::class,
+        'my_other_class_type' => \Illuminate\Support\Carbon::class . '|int',
     ],
 ],
 ```
