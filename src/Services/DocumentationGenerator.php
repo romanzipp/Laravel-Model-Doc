@@ -745,7 +745,9 @@ class DocumentationGenerator
         if (empty($types)) {
             $detectedType = match ($column['type_name'] ?? null) {
                 'int',
+                'int2',
                 'int4',
+                'int8',
                 'integer',
                 'mediumint',
                 'bigint',
@@ -760,12 +762,14 @@ class DocumentationGenerator
                 // -----------------------------
                 'string',
                 'varchar',
+                'bpchar',
                 'char',
                 'text',
                 'tinytext',
                 'mediumtext',
                 'longtext',
                 'json',
+                'jsonb',
                 'datetime',
                 'date',
                 'time',
