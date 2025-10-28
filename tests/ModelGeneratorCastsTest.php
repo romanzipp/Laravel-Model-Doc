@@ -28,4 +28,26 @@ class ModelGeneratorCastsTest extends TestCase
             ' */',
         ], $doc);
     }
+
+    public function testGeneratePropertiesForSpecificCasts()
+    {
+        config([
+            'model-doc.casts.enabled' => true,
+        ]);
+
+        $doc = $this->app->make(DocumentationGenerator::class)->generateModelDocBlock(new Model(
+            $this->getFile(__DIR__ . '/Support/ModelCustomCastSpecific.php')
+        ));
+
+        self::assertDocBlock([
+            '/**',
+            ' * @property int $column_integer',
+            ' * @property int|null $column_integer_nullable',
+            ' * @property \Illuminate\Support\Carbon $column_string',
+            ' * @property string|null $column_string_nullable',
+            ' * @property int $column_boolean',
+            ' * @property int|null $column_boolean_nullable',
+            ' */',
+        ], $doc);
+    }
 }
