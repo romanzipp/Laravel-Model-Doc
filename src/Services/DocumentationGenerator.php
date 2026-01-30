@@ -835,6 +835,21 @@ class DocumentationGenerator
             return ['\\' . now()::class];
         }
 
+        if (str_starts_with($castType, 'encrypted')) {
+            if ($castType === 'encrypted') {
+                return ['string'];
+            }
+            
+            $typeParam = explode(':', $castType, 2)[1] ?? 'string';
+            return match ($typeParam) {
+                'array' => ['array'],
+                'json'  => ['array'],
+                'int'   => ['int'],
+                'bool'  => ['bool'],
+                default => ['string'],
+            };
+        }
+
         switch ($castType) {
             case 'int':
             case 'integer':
@@ -846,7 +861,6 @@ class DocumentationGenerator
                 return ['float'];
             case 'string':
             case 'hashed':
-            case 'encrypted':
                 return ['string'];
             case 'bool':
             case 'boolean':
