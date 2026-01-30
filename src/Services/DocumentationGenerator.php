@@ -846,6 +846,7 @@ class DocumentationGenerator
                 return ['float'];
             case 'string':
             case 'hashed':
+            case 'encrypted':
                 return ['string'];
             case 'bool':
             case 'boolean':
