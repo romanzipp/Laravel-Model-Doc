@@ -8,10 +8,8 @@ use romanzipp\ModelDoc\Tests\Support\Attributes\TestAttribute;
 /**
  * @property int $column_integer
  */
-#[
-    TestAttribute,
-    TestAttribute,
-]
+#[TestAttribute,
+    TestAttribute,]
 class ModelWithExistingPhpDocAndAttributeMultiline extends EloquentModel
 {
     protected $table = 'table_one';
