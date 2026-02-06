@@ -836,15 +836,17 @@ class DocumentationGenerator
         }
 
         if (str_starts_with($castType, 'encrypted')) {
-            if ($castType === 'encrypted') return ['string'];
-        
+            if ($castType === 'encrypted') {
+                return ['string'];
+            }
+
             $typeParam = explode(':', $castType, 2)[1] ?? 'string';
-            return match ($typeParam) {
-                'array', 'json' => ['array'],
-                'collection'    => ['\\' . \Illuminate\Support\Collection::class],
-                'object'        => ['\\stdClass'],
-                default         => ['string'],
-            };
+
+            if (!$typeParam) {
+                return ['string'];
+            }
+
+            $castType = $typeParam;
         }
 
         switch ($castType) {
