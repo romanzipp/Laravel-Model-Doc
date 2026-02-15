@@ -527,7 +527,7 @@ class DocumentationGenerator
 
         $startLineIndex = null;
 
-        $lines = explode(PHP_EOL, $content);
+        $lines = explode("\n", $content);
 
         foreach ($lines as $index => $line) {
             if ( ! preg_match('/^(abstract|final|readonly)? ?class ([A-z]+)/', $line)) {
@@ -589,7 +589,7 @@ class DocumentationGenerator
             $lines[$index] = null;
         }
 
-        $docLines = explode(PHP_EOL, $docblock->toString());
+        $docLines = explode("\n", $docblock->toString());
 
         foreach (array_reverse($docLines) as $docLine) {
             array_splice($lines, $startLineIndex, 0, $docLine);
@@ -597,7 +597,7 @@ class DocumentationGenerator
 
         $lines = array_filter($lines, static fn ($line) => null !== $line);
 
-        file_put_contents($reflectionClass->getFileName(), implode(PHP_EOL, $lines));
+        file_put_contents($reflectionClass->getFileName(), implode("\n", $lines));
     }
 
     /**

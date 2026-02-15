@@ -82,9 +82,9 @@ class TestCase extends BaseTestCase
 
     protected static function assertDocBlock(array $expected, Docblock $actual): void
     {
-        self::assertSame(implode(PHP_EOL, $expected), $actual->toString());
+        self::assertSame(implode("\n", $expected), $actual->toString());
 
-        $actualLines = explode(PHP_EOL, $actual->toString());
+        $actualLines = explode("\n", $actual->toString());
 
         foreach ($expected as $index => $line) {
             self::assertSame($line, $actualLines[$index]);
