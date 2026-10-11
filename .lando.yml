@@ -1,7 +1,7 @@
 name: laravel-model-phpdoc
 recipe: lemp
 config:
-  php: "8.2"
+  php: "8.3"
   composer_version: 2
 services:
   appserver:

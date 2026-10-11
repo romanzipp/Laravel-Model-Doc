@@ -423,7 +423,7 @@ class DocumentationGenerator
      * @param \ReflectionMethod $reflectionMethod
      * @param Relations\Relation $relation
      *
-     * @return \phpowermove\docblock\tags\PropertyReadTag[]
+     * @return array<\phpowermove\docblock\tags\PropertyReadTag|\phpowermove\docblock\tags\PropertyTag>
      */
     private function getPropertiesForRelation(Model $model, \ReflectionMethod $reflectionMethod, Relations\Relation $relation): array
     {
@@ -680,25 +680,7 @@ class DocumentationGenerator
         $connection = $model->getConnection();
         $schemaBuilder = $connection->getSchemaBuilder();
 
-        if (method_exists($schemaBuilder, 'getColumns')) {
-            $tableColumns = $schemaBuilder->getColumns($model->getTable());
-        } else {
-            $tableColumnNames = $schemaBuilder->getColumnListing($model->getTable());
-
-            $tableColumns = array_map(function ($colName) use ($schemaBuilder, $model) {
-                /** @phpstan-ignore-next-line */
-                $docCol = $schemaBuilder->getConnection()->getDoctrineColumn($model->getTable(), $colName);
-
-                return [
-                    'name' => $colName,
-                    'type_name' => $schemaBuilder->getColumnType($model->getTable(), $colName),
-                    'nullable' => ! $docCol->getNotnull(),
-                    'comment' => null,
-                ];
-            }, $tableColumnNames);
-        }
-
-        return $tableColumns;
+        return $schemaBuilder->getColumns($model->getTable());
     }
 
     /**
