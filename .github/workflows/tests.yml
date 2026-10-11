@@ -7,22 +7,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ "8.2", "8.3" ]
+        php: [ "8.3", "8.4", "8.5" ]
+        laravel: [ "12", "13" ]
 
-    name: "MySQL PHP ${{ matrix.php }}"
+    name: "MySQL PHP ${{ matrix.php }} Laravel ${{ matrix.laravel }}"
     runs-on: ubuntu-latest
     services:
       database:
-        image: mariadb:10.6
+        image: mariadb:11.8
         env:
           MYSQL_DATABASE: web
           MYSQL_USER: web
           MYSQL_PASSWORD: web
           MYSQL_ROOT_PASSWORD: root
         ports: [ 3306 ]
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -31,7 +32,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist --prefer-stable
+        run: composer update --with "illuminate/support:^${{ matrix.laravel }}.0" --no-interaction --no-scripts --no-progress --prefer-dist --prefer-stable
 
       - name: Execute tests
         run: vendor/bin/phpunit
@@ -47,12 +48,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ "8.2","8.3" ]
+        php: [ "8.3", "8.4", "8.5" ]
+        laravel: [ "12", "13" ]
 
-    name: "SQLite PHP ${{ matrix.php }}"
+    name: "SQLite PHP ${{ matrix.php }} Laravel ${{ matrix.laravel }}"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -61,7 +63,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer update --with "illuminate/support:^${{ matrix.laravel }}.0" --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Execute tests
         run: vendor/bin/phpunit
